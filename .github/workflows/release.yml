@@ -43,7 +43,7 @@ jobs:
           tar -czf launchkit-build.tar.gz .next package.json package-lock.json next.config.ts prisma public
 
       - name: Attest build provenance
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: launchkit-build.tar.gz
 
