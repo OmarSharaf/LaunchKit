@@ -2,6 +2,8 @@
 
 Paths assume repo root. Adjust `../` when embedding from `docs/*.md`.
 
+**GitHub tip:** always set `width` and `height` on `<img>` tags. Markdown `![](logo.svg)` in tables renders SVGs at full size.
+
 ---
 
 ## Full tech stack

@@ -53,15 +53,11 @@ No authentication required — ideal for sales demos. Coach marks and demo hints
 
 ## 4. Stripe pricing (15 minutes)
 
-<img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/stripe.svg" width="28" alt="Stripe" align="left" />
-
 1. Create products/prices in the [Stripe Dashboard](https://dashboard.stripe.com/products).
 2. Add price IDs to `.env.local` (`STRIPE_PRICE_STARTER_MONTH`, etc.).
 3. Run `npm run db:seed` to sync plans to the database.
 
 ## 5. Whop pricing (optional, 15 minutes)
-
-<img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/whop.svg" width="28" alt="Whop" align="left" />
 
 1. Create a [Whop](https://whop.com) account and company.
 2. Create plans in the dashboard or via API.
@@ -72,8 +68,6 @@ No authentication required — ideal for sales demos. Coach marks and demo hints
 See **[docs/BILLING.md](./BILLING.md)** for details.
 
 ## 6. PayPal pricing (optional, 15 minutes)
-
-<img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/paypal.svg" width="28" alt="PayPal" align="left" />
 
 1. Create a [PayPal Developer](https://developer.paypal.com/dashboard/) app.
 2. Create subscription billing plans (`P-...` IDs).

@@ -161,10 +161,6 @@ PayPal is enabled when `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET` are set.
 
 ## Stripe
 
-<p align="left">
-  <img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/stripe.svg" width="32" alt="Stripe" align="left" />
-</p>
-
 ### Files
 
 | File                                   | Purpose                                            |
@@ -192,10 +188,6 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 ---
 
 ## Whop
-
-<p align="left">
-  <img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/whop.svg" width="32" alt="Whop" align="left" />
-</p>
 
 [Whop](https://whop.com) provides hosted checkout with 100+ payment methods. Integration uses the official [`@whop/sdk`](https://docs.whop.com/developer/api/quickstart) package.
 
@@ -244,10 +236,6 @@ Use [sandbox.whop.com](https://sandbox.whop.com) and set `WHOP_API_BASE_URL` / `
 ---
 
 ## PayPal
-
-<p align="left">
-  <img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/paypal.svg" width="32" alt="PayPal" align="left" />
-</p>
 
 Integration uses the PayPal **Subscriptions REST API** via native `fetch` (no extra npm dependency).
 

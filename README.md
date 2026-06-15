@@ -28,23 +28,23 @@
 
 <p align="center">
   <strong>Core stack</strong><br /><br />
-  <a href="https://nextjs.org" title="Next.js"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="40" height="40" alt="Next.js" /></a>
-  <a href="https://www.typescriptlang.org" title="TypeScript"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/typescript.svg" width="40" height="40" alt="TypeScript" /></a>
-  <a href="https://react.dev" title="React"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/react.svg" width="40" height="40" alt="React" /></a>
-  <a href="https://supabase.com" title="Supabase"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="40" height="40" alt="Supabase" /></a>
-  <a href="https://prisma.io" title="Prisma"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/prisma.svg" width="40" height="40" alt="Prisma" /></a>
-  <a href="https://tailwindcss.com" title="Tailwind CSS"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/tailwindcss.svg" width="40" height="40" alt="Tailwind CSS" /></a>
-  <a href="https://resend.com" title="Resend"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/resend.svg" width="40" height="40" alt="Resend" /></a>
-  <a href="https://vercel.com" title="Vercel"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/vercel.svg" width="40" height="40" alt="Vercel" /></a>
+  <a href="https://nextjs.org" title="Next.js"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/nextdotjs.svg" width="32" height="32" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org" title="TypeScript"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/typescript.svg" width="32" height="32" alt="TypeScript" /></a>
+  <a href="https://react.dev" title="React"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/react.svg" width="32" height="32" alt="React" /></a>
+  <a href="https://supabase.com" title="Supabase"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/supabase.svg" width="32" height="32" alt="Supabase" /></a>
+  <a href="https://prisma.io" title="Prisma"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/prisma.svg" width="32" height="32" alt="Prisma" /></a>
+  <a href="https://tailwindcss.com" title="Tailwind CSS"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/tailwindcss.svg" width="32" height="32" alt="Tailwind CSS" /></a>
+  <a href="https://resend.com" title="Resend"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/resend.svg" width="32" height="32" alt="Resend" /></a>
+  <a href="https://vercel.com" title="Vercel"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/vercel.svg" width="32" height="32" alt="Vercel" /></a>
 </p>
 
 <p align="center">
   <strong>Payment gateways</strong> &nbsp;·&nbsp; Stripe (default) · Whop · PayPal (optional)<br /><br />
-  <a href="https://stripe.com" title="Stripe"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="48" height="48" alt="Stripe" /></a>
+  <a href="https://stripe.com" title="Stripe"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/stripe.svg" width="36" height="36" alt="Stripe" /></a>
   &nbsp;&nbsp;
-  <a href="https://whop.com" title="Whop"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="48" height="48" alt="Whop" /></a>
+  <a href="https://whop.com" title="Whop"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/whop.svg" width="36" height="36" alt="Whop" /></a>
   &nbsp;&nbsp;
-  <a href="https://www.paypal.com" title="PayPal"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="48" height="48" alt="PayPal" /></a>
+  <a href="https://www.paypal.com" title="PayPal"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/paypal.svg" width="36" height="36" alt="PayPal" /></a>
 </p>
 
 <br />
@@ -111,38 +111,38 @@
 ## 🖥️ Tech Stack
 
 <p align="center">
-  <a href="https://nextjs.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="36" alt="Next.js" /></a>
-  <a href="https://www.typescriptlang.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/typescript.svg" width="36" alt="TypeScript" /></a>
-  <a href="https://react.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/react.svg" width="36" alt="React" /></a>
-  <a href="https://supabase.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="36" alt="Supabase" /></a>
-  <a href="https://www.postgresql.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/postgresql.svg" width="36" alt="PostgreSQL" /></a>
-  <a href="https://prisma.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/prisma.svg" width="36" alt="Prisma" /></a>
-  <a href="https://tailwindcss.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/tailwindcss.svg" width="36" alt="Tailwind" /></a>
-  <a href="https://www.radix-ui.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/radixui.svg" width="36" alt="Radix UI" /></a>
-  <a href="https://zod.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/zod.svg" width="36" alt="Zod" /></a>
-  <a href="https://react-hook-form.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/reacthookform.svg" width="36" alt="React Hook Form" /></a>
-  <a href="https://resend.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/resend.svg" width="36" alt="Resend" /></a>
-  <a href="https://jestjs.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/jest.svg" width="36" alt="Jest" /></a>
-  <a href="https://playwright.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/playwright.svg" width="36" alt="Playwright" /></a>
-  <a href="https://posthog.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/posthog.svg" width="36" alt="PostHog" /></a>
-  <a href="https://sentry.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/sentry.svg" width="36" alt="Sentry" /></a>
+  <a href="https://nextjs.org"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/nextdotjs.svg" width="28" height="28" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/typescript.svg" width="28" height="28" alt="TypeScript" /></a>
+  <a href="https://react.dev"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/react.svg" width="28" height="28" alt="React" /></a>
+  <a href="https://supabase.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/supabase.svg" width="28" height="28" alt="Supabase" /></a>
+  <a href="https://www.postgresql.org"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/postgresql.svg" width="28" height="28" alt="PostgreSQL" /></a>
+  <a href="https://prisma.io"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/prisma.svg" width="28" height="28" alt="Prisma" /></a>
+  <a href="https://tailwindcss.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/tailwindcss.svg" width="28" height="28" alt="Tailwind" /></a>
+  <a href="https://www.radix-ui.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/radixui.svg" width="28" height="28" alt="Radix UI" /></a>
+  <a href="https://zod.dev"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/zod.svg" width="28" height="28" alt="Zod" /></a>
+  <a href="https://react-hook-form.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/reacthookform.svg" width="28" height="28" alt="React Hook Form" /></a>
+  <a href="https://resend.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/resend.svg" width="28" height="28" alt="Resend" /></a>
+  <a href="https://jestjs.io"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/jest.svg" width="28" height="28" alt="Jest" /></a>
+  <a href="https://playwright.dev"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/playwright.svg" width="28" height="28" alt="Playwright" /></a>
+  <a href="https://posthog.com"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/posthog.svg" width="28" height="28" alt="PostHog" /></a>
+  <a href="https://sentry.io"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/sentry.svg" width="28" height="28" alt="Sentry" /></a>
 </p>
 
-| Layer     | Technology                                                                                                                                                                | Why                                              |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Framework | ![Next.js](docs/assets/logos/nextdotjs.svg) **Next.js 15** (App Router)                                                                                                   | Server Components, Server Actions, Turbopack dev |
-| Language  | ![TypeScript](docs/assets/logos/typescript.svg) **TypeScript 5.6** (strict)                                                                                               | End-to-end type safety                           |
-| Auth      | ![Supabase](docs/assets/logos/supabase.svg) **Supabase Auth** + `@supabase/ssr`                                                                                           | OAuth, sessions, cookie handling for SSR         |
-| Database  | ![PostgreSQL](docs/assets/logos/postgresql.svg) **PostgreSQL** + ![Prisma](docs/assets/logos/prisma.svg) **Prisma**                                                       | Relational model, migrations, typed queries      |
-| Payments  | ![Stripe](docs/assets/logos/stripe.svg) **Stripe** (default), ![Whop](docs/assets/logos/whop.svg) **Whop**, ![PayPal](docs/assets/logos/paypal.svg) **PayPal** (optional) | Checkout, subscriptions, webhooks, portals       |
-| Email     | ![Resend](docs/assets/logos/resend.svg) **Resend**                                                                                                                        | Transactional email API                          |
-| UI        | ![Tailwind](docs/assets/logos/tailwindcss.svg) **Tailwind CSS**, **shadcn/ui**, ![Radix](docs/assets/logos/radixui.svg) **Radix UI**                                      | Accessible, customizable components              |
-| Forms     | **React Hook Form** + ![Zod](docs/assets/logos/zod.svg) **Zod**                                                                                                           | Client validation aligned with server schemas    |
-| State     | **Zustand**                                                                                                                                                               | Lightweight client state (where needed)          |
-| Testing   | ![Jest](docs/assets/logos/jest.svg) **Jest** + **React Testing Library**, ![Playwright](docs/assets/logos/playwright.svg) **Playwright**                                  | Unit/integration + E2E smoke tests               |
-| Fonts     | **Geist**                                                                                                                                                                 | Sans + mono via `geist` package                  |
-| Deploy    | ![Vercel](docs/assets/logos/vercel.svg) **Vercel** (recommended), ![Docker](docs/assets/logos/docker.svg) **Docker** / VPS                                                | Production hosting                               |
-| CI        | ![GitHub Actions](docs/assets/logos/githubactions.svg) **GitHub Actions**                                                                                                 | Lint, test, build, provenance                    |
+| Layer     | Technology                                            | Why                                              |
+| --------- | ----------------------------------------------------- | ------------------------------------------------ |
+| Framework | **Next.js 15** (App Router)                           | Server Components, Server Actions, Turbopack dev |
+| Language  | **TypeScript 5.6** (strict)                           | End-to-end type safety                           |
+| Auth      | **Supabase Auth** + `@supabase/ssr`                   | OAuth, sessions, cookie handling for SSR         |
+| Database  | **PostgreSQL** + **Prisma**                           | Relational model, migrations, typed queries      |
+| Payments  | **Stripe** (default), **Whop**, **PayPal** (optional) | Checkout, subscriptions, webhooks, portals       |
+| Email     | **Resend**                                            | Transactional email API                          |
+| UI        | **Tailwind CSS**, **shadcn/ui**, **Radix UI**         | Accessible, customizable components              |
+| Forms     | **React Hook Form** + **Zod**                         | Client validation aligned with server schemas    |
+| State     | **Zustand**                                           | Lightweight client state (where needed)          |
+| Testing   | **Jest** + **React Testing Library**, **Playwright**  | Unit/integration + E2E smoke tests               |
+| Fonts     | **Geist**                                             | Sans + mono via `geist` package                  |
+| Deploy    | **Vercel** (recommended), **Docker** / VPS            | Production hosting                               |
+| CI        | **GitHub Actions**                                    | Lint, test, build, provenance                    |
 
 ---
 
@@ -447,11 +447,11 @@ The callback route also supports **magic-link** flows from Supabase; add a magic
 ## 💳 Billing Flow
 
 <p align="center">
-  <a href="https://stripe.com" title="Stripe — default gateway"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="56" alt="Stripe" /></a>
+  <a href="https://stripe.com" title="Stripe — default gateway"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/stripe.svg" width="36" height="36" alt="Stripe" /></a>
   &nbsp;&nbsp;
-  <a href="https://whop.com" title="Whop — optional"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="56" alt="Whop" /></a>
+  <a href="https://whop.com" title="Whop — optional"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/whop.svg" width="36" height="36" alt="Whop" /></a>
   &nbsp;&nbsp;
-  <a href="https://www.paypal.com" title="PayPal — optional"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="56" alt="PayPal" /></a>
+  <a href="https://www.paypal.com" title="PayPal — optional"><img style="background:#fff;border-radius:6px;padding:4px" src="docs/assets/logos/paypal.svg" width="36" height="36" alt="PayPal" /></a>
 </p>
 
 Launch Kit supports **Stripe** (default), **Whop**, and **PayPal** as payment gateways. Users pick their preferred method on the billing page when multiple providers are configured.
