@@ -10,6 +10,8 @@
 
 Thank you for considering a contribution to Launch Kit. Whether you fix a bug, improve docs, add a feature, or report an issue — it helps the whole community.
 
+**Documentation index:** [docs/README.md](docs/README.md) · in-app hub at `/docs` when running locally.
+
 ## Table of Contents
 
 - [Code of Conduct](#code-of-conduct)

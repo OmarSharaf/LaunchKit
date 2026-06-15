@@ -5,6 +5,7 @@ import { BillingAlerts } from '@/components/billing/billing-alerts'
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header'
 import { EmptyState } from '@/components/dashboard/empty-state'
 import { getDbUserWithMemberships, requireAuth } from '@/lib/auth'
+import { getPlanNameFromSlug, planMatchesSlug } from '@/lib/plan-selection'
 import { prisma } from '@/lib/prisma'
 import { isPayPalEnabled } from '@/lib/paypal'
 import { isWhopEnabled } from '@/lib/whop'
@@ -21,13 +22,14 @@ import {
 export const metadata: Metadata = { title: 'Billing' }
 
 interface BillingPageProps {
-  searchParams: Promise<{ success?: string; canceled?: string }>
+  searchParams: Promise<{ success?: string; canceled?: string; plan?: string }>
 }
 
 export default async function BillingPage({ searchParams }: BillingPageProps) {
   await requireAuth()
   const dbUser = await getDbUserWithMemberships()
   const params = await searchParams
+  const selectedPlanName = getPlanNameFromSlug(params.plan)
 
   const org = dbUser?.memberships[0]?.organization
   const sub = org?.subscription
@@ -48,6 +50,13 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
       />
 
       <BillingAlerts success={params.success} canceled={params.canceled} />
+
+      {selectedPlanName && !active && (
+        <p className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+          You selected the <strong>{selectedPlanName}</strong> plan — start your
+          trial below.
+        </p>
+      )}
 
       {!org ? (
         <EmptyState
@@ -111,6 +120,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                     paypalPlanId: p.paypalPlanId,
                     amount: p.amount,
                     isPopular: p.isPopular,
+                    highlighted: planMatchesSlug(p.name, params.plan),
                   }))}
                 />
               )}
@@ -125,7 +135,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                   <Card
                     key={plan.id}
                     className={
-                      plan.isPopular
+                      plan.isPopular || planMatchesSlug(plan.name, params.plan)
                         ? 'border-primary ring-1 ring-primary/20'
                         : undefined
                     }

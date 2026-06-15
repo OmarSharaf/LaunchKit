@@ -15,6 +15,9 @@ describe('marketing content', () => {
   it('exports navigation and footer links', () => {
     expect(NAV_LINKS.some((l) => l.label === 'Product')).toBe(true)
     expect(FOOTER_LINKS.product.some((l) => l.label === 'Live demo')).toBe(true)
+    expect(FOOTER_LINKS.product.some((l) => l.label === 'Admin demo')).toBe(
+      true
+    )
     expect(FOOTER_LINKS.connect.length).toBeGreaterThan(0)
   })
 
@@ -24,7 +27,7 @@ describe('marketing content', () => {
     expect(LOGO_CLOUD).toContain('Stripe')
     expect(FEATURES).toHaveLength(7)
     expect(FEATURES[0].title).toBe('Dashboard shell')
-    expect(STEPS[0].title).toBe('Clone & configure')
+    expect(STEPS[0].title).toBe('Explore or sign up')
   })
 
   it('exports pricing plans with highlighted tier', () => {
@@ -37,7 +40,7 @@ describe('marketing content', () => {
 
   it('exports testimonials, faq, and showcase items', () => {
     expect(TESTIMONIALS).toHaveLength(3)
-    expect(FAQ_ITEMS).toHaveLength(4)
+    expect(FAQ_ITEMS).toHaveLength(7)
     expect(SHOWCASE_ITEMS).toHaveLength(3)
   })
 })

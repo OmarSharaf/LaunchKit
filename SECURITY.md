@@ -92,7 +92,16 @@ Set in `next.config.ts` for all routes:
 
 CSP `connect-src` allows Supabase, Stripe, Whop, PayPal, and Sentry ingest endpoints. `frame-src` allows Stripe and PayPal checkout iframes. Tighten or extend these when you add third-party scripts.
 
-### Access control
+### Public routes
+
+These paths are intentionally **unauthenticated** for marketing and demos:
+
+- `/`, `/docs`, `/design-system`, `/privacy`, `/terms`
+- `/demo` and all `/demo/*` sub-routes (mock data only — no real user data)
+
+Do not expose sensitive operations on public routes. Admin APIs return 404 when `FEATURE_ADMIN_DASHBOARD` is disabled.
+
+## Access control
 
 - Organization role model: `SUPER_ADMIN`, `ADMIN`, `MEMBER` on `OrganizationMember`
 - Server helpers in `src/lib/auth.ts`:
@@ -100,7 +109,7 @@ CSP `connect-src` allows Supabase, Stripe, Whop, PayPal, and Sentry ingest endpo
   - `requireOrgMember` — any org member
   - `requireOrgRole` — admin roles (default `ADMIN` + `SUPER_ADMIN`)
 - Throws `ForbiddenError` (403) instead of returning null — use consistent error handling in API routes
-- **Platform admin**: `PLATFORM_ADMIN_EMAILS` env + `isPlatformAdmin` flag; `requirePlatformAdmin` guards `/api/admin/*` and `/dashboard/admin`
+- **Platform admin**: `PLATFORM_ADMIN_EMAILS` env + `isPlatformAdmin` flag; `requirePlatformAdmin` guards `/api/admin/*` and `/dashboard/admin`. Full guide: [docs/ADMIN.md](./docs/ADMIN.md)
 - Platform admins can suspend users, toggle signups, and delete orgs across the platform
 - **API keys**: hashed at rest; validate with `requireApiKey` from `src/lib/api-key-auth.ts` in custom integrations
 

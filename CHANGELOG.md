@@ -16,6 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- **Architecture documentation** — [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) and in-app hub at `/docs`
+- **Marketing guide** — [docs/MARKETING.md](./docs/MARKETING.md): landing page structure, customer journey, customization
+- **Marketing UI/UX polish** — scroll-aware nav, card hovers, two-column FAQ, plan-aware register flow
+- **Customer journey polish** — pricing → register (`?plan=`) → billing highlight; auth sidebar demo links; user-focused onboarding checklist
+
 - **Whop payment gateway** — optional alternative to Stripe; hosted checkout, webhooks, billing portal (`src/lib/whop.ts`, `/api/whop/*`, `/api/webhooks/whop`)
 - **PayPal payment gateway** — optional alternative via Subscriptions REST API; checkout, webhooks, autopay portal (`src/lib/paypal.ts`, `/api/paypal/*`, `/api/webhooks/paypal`)
 - **Multi-provider billing UI** — payment method picker on `/dashboard/billing` (Stripe / Whop / PayPal)
@@ -25,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Billing documentation** — [`docs/BILLING.md`](./docs/BILLING.md)
 - **Build provenance attestations** in CI and Release workflows via [`actions/attest-build-provenance@v3`](https://github.com/actions/attest-build-provenance)
 - **Live demo dashboard** at `/demo` — public preview of the full dashboard UI (overview, billing, settings) with mock data; no authentication required
+- **Public admin demo** at `/demo/admin` — platform admin console preview with sample data (`src/lib/demo-admin-data.ts`); see [docs/ADMIN.md](./docs/ADMIN.md)
 - **Demo components:** activity chart, activity feed, metrics grid, preview banner
 - **Marketing landing page** sections: stats bar, logo cloud, product showcase, integrations, how-it-works, testimonials, FAQ, CTA
 - **Env-driven branding** via `src/lib/site.ts` (`NEXT_PUBLIC_APP_NAME`, tagline, description, product category, support email, developer credit toggle, docs/repo URLs)

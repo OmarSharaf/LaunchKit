@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { filterDemoAdminInvitations } from '@/lib/demo-admin-data'
 
 interface AdminInvitation {
   id: string
@@ -23,7 +24,13 @@ interface AdminInvitation {
   createdAt: string
 }
 
-export function AdminInvitationsPanel() {
+interface AdminInvitationsPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminInvitationsPanel({
+  isDemo = false,
+}: AdminInvitationsPanelProps) {
   const [invitations, setInvitations] = useState<AdminInvitation[]>([])
   const [status, setStatus] = useState<'PENDING' | 'ACCEPTED' | 'EXPIRED'>(
     'PENDING'
@@ -36,6 +43,11 @@ export function AdminInvitationsPanel() {
     setLoading(true)
     setError(null)
     try {
+      if (isDemo) {
+        setInvitations(filterDemoAdminInvitations(status))
+        return
+      }
+
       const res = await fetch(
         `/api/admin/invitations?status=${status}&limit=50`
       )
@@ -49,13 +61,14 @@ export function AdminInvitationsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [status])
+  }, [isDemo, status])
 
   useEffect(() => {
     void loadInvitations()
   }, [loadInvitations])
 
   async function revokeInvitation(id: string, email: string) {
+    if (isDemo) return
     if (!window.confirm(`Revoke invitation for ${email}?`)) return
     setActionId(id)
     try {

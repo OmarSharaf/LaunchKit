@@ -8,9 +8,9 @@ import { DEMO_DASHBOARD_PATH } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 const TABS = [
-  { id: 'overview', label: 'Overview', icon: Activity },
-  { id: 'billing', label: 'Billing', icon: CreditCard },
-  { id: 'team', label: 'Team', icon: Users },
+  { id: 'overview', label: 'Overview', icon: Activity, href: '/demo' },
+  { id: 'billing', label: 'Billing', icon: CreditCard, href: '/demo/billing' },
+  { id: 'team', label: 'Team', icon: Users, href: '/demo/team' },
 ] as const
 
 type TabId = (typeof TABS)[number]['id']
@@ -154,10 +154,10 @@ export function HeroVisual() {
         </div>
       </div>
       <Link
-        href={DEMO_DASHBOARD_PATH}
+        href={TABS.find((t) => t.id === tab)?.href ?? DEMO_DASHBOARD_PATH}
         className="mt-4 block text-center text-sm text-muted-foreground transition-colors hover:text-primary"
       >
-        Open the full interactive demo dashboard →
+        Open full {TABS.find((t) => t.id === tab)?.label.toLowerCase()} demo →
       </Link>
     </div>
   )

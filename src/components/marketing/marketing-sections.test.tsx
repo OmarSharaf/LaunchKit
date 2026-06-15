@@ -21,6 +21,9 @@ describe('marketing sections', () => {
       })
     ).toBeInTheDocument()
     expect(
+      screen.getByRole('link', { name: /start free trial/i })
+    ).toHaveAttribute('href', '/auth/register')
+    expect(
       screen.getByRole('link', { name: /view live demo/i })
     ).toHaveAttribute('href', '/demo')
     expect(
@@ -48,7 +51,7 @@ describe('marketing sections', () => {
     expect(screen.getByText('Unified dashboard')).toBeInTheDocument()
 
     render(<HowItWorksSection />)
-    expect(screen.getByText('Clone & configure')).toBeInTheDocument()
+    expect(screen.getByText('Explore or sign up')).toBeInTheDocument()
   })
 
   it('renders pricing, testimonials, and CTA', () => {
@@ -59,7 +62,7 @@ describe('marketing sections', () => {
     expect(screen.getByText(/alex chen/i)).toBeInTheDocument()
 
     render(<CtaSection />)
-    expect(screen.getByText(/ready to fork and ship/i)).toBeInTheDocument()
+    expect(screen.getByText(/ready to try it for real/i)).toBeInTheDocument()
   })
 
   it('renders SectionHeading alignments', () => {
@@ -76,11 +79,12 @@ describe('marketing sections', () => {
     const licenseButton = screen.getByRole('button', {
       name: /is this really free/i,
     })
+    expect(licenseButton).toHaveAttribute('aria-expanded', 'true')
     fireEvent.click(licenseButton)
-    expect(screen.getByText(/MIT-licensed/i)).not.toBeVisible()
+    expect(licenseButton).toHaveAttribute('aria-expanded', 'false')
 
     fireEvent.click(licenseButton)
-    expect(screen.getByText(/MIT-licensed/i)).toBeVisible()
+    expect(licenseButton).toHaveAttribute('aria-expanded', 'true')
 
     fireEvent.click(
       screen.getByRole('button', {

@@ -15,6 +15,7 @@ import {
   APP_NAME,
   DEVELOPER_LINKEDIN,
   DEVELOPER_URL,
+  DEMO_ADMIN_PATH,
   DEMO_DASHBOARD_PATH,
   DOCS_URL,
   GITHUB_REPO,
@@ -49,10 +50,10 @@ export const INTEGRATIONS_SECTION = {
 } as const
 
 export const CTA_SECTION = {
-  title: 'Ready to fork and ship?',
+  title: 'Ready to try it for real?',
   description: (appName: string) =>
-    `Clone ${appName}, customize branding in an afternoon, and deploy with auth and billing already in place.`,
-  primaryCta: 'Get started free',
+    `Create a free account on ${appName}, explore the live demo first, or fork the repo and ship your own SaaS.`,
+  primaryCta: 'Start free trial',
   secondaryCta: 'View live demo',
 } as const
 
@@ -67,12 +68,16 @@ export const FEATURES: {
   icon: LucideIcon
   title: string
   description: string
+  href?: string
+  hrefLabel?: string
 }[] = [
   {
     icon: LineChart,
     title: 'Dashboard shell',
     description:
       'Production sidebar layout with org switcher, command palette, mobile nav, and dark mode.',
+    href: DEMO_DASHBOARD_PATH,
+    hrefLabel: 'Open demo',
   },
   {
     icon: Workflow,
@@ -91,6 +96,8 @@ export const FEATURES: {
     title: 'Billing integrations',
     description:
       'Stripe, PayPal, and Whop checkout, webhooks, and customer portals out of the box.',
+    href: `${DEMO_DASHBOARD_PATH}/billing`,
+    hrefLabel: 'Billing demo',
   },
   {
     icon: Key,
@@ -108,7 +115,9 @@ export const FEATURES: {
     icon: Bell,
     title: 'Public demo mode',
     description:
-      'Full /demo dashboard with coach marks — no login required for prospects or GitHub visitors.',
+      'Full /demo dashboard plus /demo/admin platform console — no login for prospects or GitHub visitors.',
+    href: DEMO_ADMIN_PATH,
+    hrefLabel: 'Admin demo',
   },
 ]
 
@@ -116,27 +125,29 @@ export const STEPS = [
   {
     step: '01',
     icon: Zap,
-    title: 'Clone & configure',
-    description: `Fork ${APP_NAME}, copy .env.example, and set your Supabase + database URLs.`,
+    title: 'Explore or sign up',
+    description:
+      'Try the live demo with no account, or register free and get a workspace in minutes.',
   },
   {
     step: '02',
     icon: Layers,
-    title: 'Customize branding',
+    title: 'Pick a plan',
     description:
-      'Edit marketing.ts, demo-data.ts, and CSS variables — one afternoon to make it yours.',
+      'Choose Starter or Pro on Billing — Stripe, Whop, or PayPal checkout when you are ready.',
   },
   {
     step: '03',
     icon: BarChart3,
-    title: 'Ship your product',
+    title: 'Invite your team',
     description:
-      'Add your domain logic on top of auth, billing, and the dashboard shell.',
+      'Add teammates from Settings, track usage in Analytics, and manage billing from one dashboard.',
   },
 ] as const
 
 export const PLANS = [
   {
+    slug: 'starter' as const,
     name: 'Starter',
     price: '$9',
     period: '/month',
@@ -149,10 +160,11 @@ export const PLANS = [
       'Stripe billing',
     ],
     cta: 'Start free trial',
-    href: '/auth/register',
+    href: '/auth/register?plan=starter',
     highlighted: false,
   },
   {
+    slug: 'pro' as const,
     name: 'Pro',
     price: '$29',
     period: '/month',
@@ -166,11 +178,12 @@ export const PLANS = [
       'All payment providers',
     ],
     cta: 'Start free trial',
-    href: '/auth/register',
+    href: '/auth/register?plan=pro',
     highlighted: true,
   },
   {
     name: 'Enterprise',
+    slug: 'enterprise' as const,
     price: 'Custom',
     period: '',
     description: 'For organizations with advanced needs.',
@@ -226,6 +239,21 @@ export const FAQ_ITEMS = [
       'Stripe, PayPal, and Whop are wired with checkout, webhooks, and portal routes. Enable the ones you need via env vars.',
   },
   {
+    question: 'What is the difference between the demo and a real account?',
+    answer:
+      'The /demo routes show sample data with no login. A real account uses Supabase auth, your database, and live billing when payment providers are configured.',
+  },
+  {
+    question: 'What happens after I register?',
+    answer:
+      'You land on the dashboard, get a default workspace, and can subscribe on Billing. Marketing plan links carry ?plan= so Billing can highlight your chosen tier.',
+  },
+  {
+    question: 'Can teammates join without paying separately?',
+    answer:
+      'Yes. Org admins invite members from Settings or Team. Billing is per organization, not per seat in this starter kit.',
+  },
+  {
     question: 'How do I customize the UI?',
     answer:
       'See docs/CUSTOMIZATION.md for branding, theme presets, marketing copy, and the /design-system reference page.',
@@ -235,6 +263,7 @@ export const FAQ_ITEMS = [
 export const NAV_LINKS = [
   { href: '#features', label: 'Features' },
   { href: '#showcase', label: 'Product' },
+  { href: '#how-it-works', label: 'How it works' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQ' },
 ] as const
@@ -243,9 +272,11 @@ export const FOOTER_LINKS = {
   product: [
     { href: '#features', label: 'Features' },
     { href: DEMO_DASHBOARD_PATH, label: 'Live demo' },
+    { href: DEMO_ADMIN_PATH, label: 'Admin demo' },
     { href: '#pricing', label: 'Pricing' },
     { href: '/design-system', label: 'Design system' },
-    { href: DOCS_URL, label: 'Docs', external: true },
+    { href: '/docs', label: 'Docs' },
+    { href: DOCS_URL, label: 'GitHub docs', external: true },
   ],
   company: [
     { href: GITHUB_REPO, label: 'GitHub', external: true },
@@ -263,15 +294,18 @@ export const SHOWCASE_ITEMS = [
     title: 'Unified dashboard',
     description: 'Sidebar, metrics, charts, and activity in one shell.',
     gradient: 'from-primary/20 to-blue-500/10',
+    href: DEMO_DASHBOARD_PATH,
   },
   {
     title: 'Billing ready',
     description: 'Checkout, portal, and webhooks for three providers.',
     gradient: 'from-violet-500/20 to-fuchsia-500/10',
+    href: `${DEMO_DASHBOARD_PATH}/billing`,
   },
   {
     title: 'Team & settings',
     description: 'Org management, API keys, and tabbed settings.',
     gradient: 'from-emerald-500/20 to-teal-500/10',
+    href: `${DEMO_DASHBOARD_PATH}/settings`,
   },
 ] as const

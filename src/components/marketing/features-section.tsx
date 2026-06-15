@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -10,10 +12,7 @@ import { FEATURES } from '@/lib/marketing'
 
 export function FeaturesSection() {
   return (
-    <section
-      id="features"
-      className="scroll-mt-20 border-b border-border py-20 md:py-28"
-    >
+    <section id="features" className="marketing-section">
       <div className="container">
         <SectionHeading
           eyebrow="Features"
@@ -27,7 +26,7 @@ export function FeaturesSection() {
             return (
               <Card
                 key={feature.title}
-                className="group border-border/80 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                className="marketing-card-hover group border-border/80"
               >
                 <CardHeader>
                   <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
@@ -35,10 +34,19 @@ export function FeaturesSection() {
                   </div>
                   <CardTitle className="text-lg">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-3">
                   <CardDescription className="text-sm leading-relaxed">
                     {feature.description}
                   </CardDescription>
+                  {feature.href && (
+                    <Link
+                      href={feature.href}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    >
+                      {feature.hrefLabel ?? 'Learn more'}
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             )

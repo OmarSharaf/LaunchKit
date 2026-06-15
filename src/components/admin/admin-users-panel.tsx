@@ -19,6 +19,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  DEMO_ADMIN_USER_DETAILS,
+  filterDemoAdminUsers,
+} from '@/lib/demo-admin-data'
 import { cn } from '@/lib/utils'
 
 interface AdminUser {
@@ -58,7 +62,11 @@ interface UserDetail {
 
 type StatusFilter = 'ALL' | 'ACTIVE' | 'SUSPENDED' | 'BANNED'
 
-export function AdminUsersPanel() {
+interface AdminUsersPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminUsersPanel({ isDemo = false }: AdminUsersPanelProps) {
   const [users, setUsers] = useState<AdminUser[]>([])
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL')
@@ -74,6 +82,17 @@ export function AdminUsersPanel() {
     setLoading(true)
     setError(null)
     try {
+      if (isDemo) {
+        setUsers(
+          filterDemoAdminUsers({
+            search,
+            status: statusFilter,
+            recentOnly,
+          })
+        )
+        return
+      }
+
       const params = new URLSearchParams({ limit: '50' })
       if (search.trim()) params.set('search', search.trim())
       if (statusFilter !== 'ALL') params.set('status', statusFilter)
@@ -88,7 +107,7 @@ export function AdminUsersPanel() {
     } finally {
       setLoading(false)
     }
-  }, [search, statusFilter, recentOnly])
+  }, [isDemo, search, statusFilter, recentOnly])
 
   useEffect(() => {
     void loadUsers()
@@ -97,6 +116,13 @@ export function AdminUsersPanel() {
   async function fetchDetail(id: string) {
     setDetailLoading(true)
     try {
+      if (isDemo) {
+        const user = DEMO_ADMIN_USER_DETAILS[id]
+        if (!user) throw new Error('No demo detail for this user')
+        setDetail(user)
+        return
+      }
+
       const res = await fetch(`/api/admin/users/${id}`)
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed to load user')
@@ -124,6 +150,7 @@ export function AdminUsersPanel() {
     id: string,
     body: Record<string, unknown>
   ): Promise<void> {
+    if (isDemo) return
     setActionId(id)
     setError(null)
     try {
@@ -144,6 +171,7 @@ export function AdminUsersPanel() {
   }
 
   async function deleteUser(id: string, email: string) {
+    if (isDemo) return
     if (!window.confirm(`Delete user ${email}? This cannot be undone.`)) return
     setActionId(id)
     setError(null)

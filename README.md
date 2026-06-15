@@ -73,6 +73,10 @@
 - [Authentication Flow](#-authentication-flow)
 - [Billing Flow](#-billing-flow)
 - [Payment Gateways](./docs/BILLING.md)
+- [Marketing Site](./docs/MARKETING.md)
+- [Platform Admin](./docs/ADMIN.md)
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Documentation Index](./docs/README.md)
 - [Database Schema](#️-database-schema)
 - [Testing](#-testing)
 - [CI/CD](#-cicd)
@@ -93,8 +97,8 @@
 | 🏢 **Multi-tenancy**        | Organizations, members, roles (`SUPER_ADMIN` / `ADMIN` / `MEMBER`), invitations in Prisma     |
 | 💳 **Billing**              | Stripe (default) + optional Whop & PayPal; checkout, webhooks, portals, multi-gateway UI      |
 | 🛡️ **Route protection**     | Middleware session refresh + redirects for `/dashboard` and `/auth`                           |
-| 🎭 **Live demo**            | Public `/demo` dashboard with mock data — no sign-in required                                 |
-| 🌐 **Marketing site**       | Full landing page: hero, stats, features, showcase, integrations, pricing, FAQ, testimonials  |
+| 🎭 **Live demo**            | Public `/demo` dashboard and `/demo/admin` platform console — no sign-in required             |
+| 🌐 **Marketing site**       | Landing page with scroll-aware nav, pricing → register flow, FAQ, `/docs` hub                 |
 | 🎨 **UI system**            | shadcn/ui + Radix UI + Tailwind CSS + dark mode + **theme presets** (`/design-system`)        |
 | 🧩 **Dashboard shell**      | Org switcher, ⌘K command palette, mobile nav, loading skeletons, empty states                 |
 | 🏷️ **White-label branding** | App name, tagline, URLs, and developer credit via environment variables                       |
@@ -225,6 +229,7 @@ npm run dev
 | -------------------------------------------------------------------- | ------------------------------ |
 | [http://localhost:3000](http://localhost:3000)                       | Marketing landing page         |
 | [http://localhost:3000/demo](http://localhost:3000/demo)             | Live demo dashboard (no login) |
+| [http://localhost:3000/demo/admin](http://localhost:3000/demo/admin) | Platform admin demo (no login) |
 | [http://localhost:3000/auth/login](http://localhost:3000/auth/login) | Sign in                        |
 | [http://localhost:3000/dashboard](http://localhost:3000/dashboard)   | App dashboard (requires auth)  |
 
@@ -244,18 +249,29 @@ Launch Kit includes a **public demo** at `/demo` that mirrors the real dashboard
 
 - Overview with metrics, activity feed, and workspace cards
 - Billing and settings preview pages
+- **Platform admin demo** at `/demo/admin` — same `AdminConsole` UI with sample users, orgs, billing, and audit data (`src/lib/demo-admin-data.ts`)
 - “Exit demo” returns visitors to the marketing site
 - **No authentication** — middleware explicitly does not protect `/demo`
 
-Use this for sales, portfolios, or trying the UI before configuring Supabase. Customize mock names and plans in `demo-data.ts`.
+Use this for sales, portfolios, or trying the UI before configuring Supabase. Customize mock names and plans in `demo-data.ts` and admin samples in `demo-admin-data.ts`.
 
-The marketing header links to `/demo` as **Live demo** (`DEMO_DASHBOARD_PATH` in `src/lib/site.ts`).
+The marketing header links to `/demo` as **Demo**, the footer includes **Admin demo**, and **`/docs`** is the in-app documentation hub.
+
+### Customer journey
+
+```
+Marketing (/) → Pricing (#pricing) → Register (?plan=) → Dashboard billing → Payment provider checkout
+                     ↓
+              Live demo (/demo/*) — no signup required
+```
+
+See **[docs/MARKETING.md](./docs/MARKETING.md)** for the full landing-page guide.
 
 ---
 
 ## 🏷️ Customize Your Product
 
-See **[docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md)** for branding, marketing, demo data, and billing setup. UI patterns (theme presets, command palette, empty states) are in **[docs/UI_UX.md](./docs/UI_UX.md)**.
+See **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** for the full stack map. **[docs/MARKETING.md](./docs/MARKETING.md)** for the landing page. Branding: **[docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md)**. UI: **[docs/UI_UX.md](./docs/UI_UX.md)**. Admin: **[docs/ADMIN.md](./docs/ADMIN.md)**. Index: **[docs/README.md](./docs/README.md)** or **`/docs`** in the app.
 
 ### Branding (`src/lib/site.ts` + env)
 
@@ -277,12 +293,16 @@ See **[docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md)** for branding, marketing
 
 Edit one file to change:
 
-- `STATS`, `LOGO_CLOUD`, `FEATURES`, `PRICING_PLANS`, `FAQ_ITEMS`
-- `NAV_LINKS`, `FOOTER_LINKS`, `TESTIMONIALS`, `SHOWCASE_ITEMS`, `HOW_IT_WORKS`
+- `STATS`, `LOGO_CLOUD`, `FEATURES`, `PLANS`, `FAQ_ITEMS`
+- `NAV_LINKS`, `FOOTER_LINKS`, `TESTIMONIALS`, `SHOWCASE_ITEMS`, `STEPS`
 
 ### Demo data (`src/lib/demo-data.ts`)
 
 Change `DEMO_USER`, `DEMO_ORG`, `DEMO_ORGANIZATIONS`, and activity metrics for the `/demo` experience.
+
+### Admin demo data (`src/lib/demo-admin-data.ts`)
+
+Sample users, organizations, subscriptions, and audit events for `/demo/admin`.
 
 ---
 
@@ -299,6 +319,7 @@ launchkit/
 │   ├── app/                   # Next.js App Router
 │   │   ├── layout.tsx         # Root layout, fonts, theme, metadata
 │   │   ├── page.tsx           # Marketing landing page
+│   │   ├── docs/              # In-app documentation hub
 │   │   ├── auth/              # login, register, forgot-password
 │   │   ├── dashboard/         # Protected app (overview → redirects to /dashboard)
 │   │   ├── demo/              # Public demo dashboard
@@ -353,6 +374,10 @@ launchkit/
 │   └── ci.env                 # Dummy env for CI builds
 ├── docs/
 │   ├── assets/                # SVG logos for docs & README (see assets/README.md)
+│   ├── ARCHITECTURE.md        # Marketing → auth → app map
+│   ├── MARKETING.md           # Landing page & customer journey
+│   ├── README.md              # Documentation index
+│   ├── ADMIN.md               # Platform admin guide
 │   ├── BILLING.md             # Stripe, Whop, PayPal setup
 │   ├── CUSTOMIZATION.md       # Branding & fork guide
 │   ├── UI_UX.md               # Dashboard & marketing UX
@@ -372,26 +397,35 @@ launchkit/
 
 ### Public pages
 
-| Route                   | Description             |
-| ----------------------- | ----------------------- |
-| `/`                     | Marketing landing page  |
-| `/demo`                 | Demo dashboard overview |
-| `/demo/billing`         | Demo billing preview    |
-| `/demo/settings`        | Demo settings preview   |
-| `/auth/login`           | Sign in                 |
-| `/auth/register`        | Create account          |
-| `/auth/forgot-password` | Password reset          |
-| `/privacy`              | Privacy policy          |
-| `/terms`                | Terms of service        |
+| Route                   | Description                 |
+| ----------------------- | --------------------------- |
+| `/`                     | Marketing landing page      |
+| `/design-system`        | Component & theme reference |
+| `/docs`                 | In-app documentation hub    |
+| `/demo`                 | Demo dashboard overview     |
+| `/demo/analytics`       | Demo analytics preview      |
+| `/demo/team`            | Demo team preview           |
+| `/demo/admin`           | Platform admin demo         |
+| `/demo/billing`         | Demo billing preview        |
+| `/demo/settings`        | Demo settings preview       |
+| `/auth/login`           | Sign in                     |
+| `/auth/register`        | Create account              |
+| `/auth/forgot-password` | Password reset              |
+| `/privacy`              | Privacy policy              |
+| `/terms`                | Terms of service            |
 
 ### Protected pages (auth required)
 
-| Route                 | Description                     |
-| --------------------- | ------------------------------- |
-| `/dashboard`          | Main dashboard overview         |
-| `/dashboard/billing`  | Subscription & billing          |
-| `/dashboard/settings` | Profile & organization settings |
-| `/dashboard/overview` | Redirects to `/dashboard`       |
+| Route                  | Description                     |
+| ---------------------- | ------------------------------- |
+| `/dashboard`           | Main dashboard overview         |
+| `/dashboard/analytics` | Usage charts                    |
+| `/dashboard/team`      | Members & invitations           |
+| `/dashboard/billing`   | Subscription & billing          |
+| `/dashboard/settings`  | Profile & organization settings |
+| `/dashboard/admin`     | Platform admin (operators only) |
+| `/dashboard/audit`     | Org audit log (feature flag)    |
+| `/dashboard/overview`  | Redirects to `/dashboard`       |
 
 Middleware also treats `/org`, `/settings`, and `/billing` prefixes as protected (for future or nested routes).
 

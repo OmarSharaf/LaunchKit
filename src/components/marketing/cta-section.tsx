@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { ArrowRight, Play } from 'lucide-react'
+import { ArrowRight, BookOpen, Play } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CTA_SECTION } from '@/lib/marketing'
-import { APP_NAME, DEMO_DASHBOARD_PATH } from '@/lib/site'
+import { APP_NAME, DEMO_DASHBOARD_PATH, DOCS_HUB_PATH } from '@/lib/site'
 
 export function CtaSection() {
   return (
@@ -39,6 +39,12 @@ export function CtaSection() {
                 <Link href={DEMO_DASHBOARD_PATH}>
                   <Play className="h-4 w-4" />
                   {CTA_SECTION.secondaryCta}
+                </Link>
+              </Button>
+              <Button size="lg" variant="ghost" asChild>
+                <Link href={DOCS_HUB_PATH}>
+                  <BookOpen className="h-4 w-4" />
+                  Read docs
                 </Link>
               </Button>
             </div>

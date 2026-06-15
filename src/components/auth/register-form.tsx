@@ -9,8 +9,16 @@ import { AUTH_CALLBACK_URL } from '@/lib/site'
 import { signUpSchema, type SignUpInput } from '@/lib/validations'
 import { OAuthButtons } from '@/components/auth/oauth-buttons'
 import { PasswordStrength } from '@/components/auth/password-strength'
+import {
+  buildPostSignupBillingPath,
+  isMarketingPlanSlug,
+} from '@/lib/plan-selection'
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  planSlug?: string | null
+}
+
+export function RegisterForm({ planSlug = null }: RegisterFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [success, setSuccess] = useState(false)
   const [oauthLoading, setOauthLoading] = useState<'google' | 'github' | null>(
@@ -40,12 +48,16 @@ export function RegisterForm() {
   })
 
   const supabase = createClient()
+  const postSignupPath = buildPostSignupBillingPath(planSlug)
+  const oauthRedirectTo = isMarketingPlanSlug(planSlug)
+    ? `${AUTH_CALLBACK_URL}?next=${encodeURIComponent(postSignupPath)}`
+    : AUTH_CALLBACK_URL
 
   async function signInWithOAuth(provider: 'google' | 'github') {
     setOauthLoading(provider)
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: AUTH_CALLBACK_URL },
+      options: { redirectTo: oauthRedirectTo },
     })
     if (error) {
       setOauthLoading(null)
@@ -97,8 +109,15 @@ export function RegisterForm() {
         <h2 className="mb-2 font-semibold">Check your email</h2>
         <p className="text-sm text-muted-foreground">
           We&apos;ve sent a confirmation link to your email. Click it to
-          activate your account.
+          activate your account, then choose your plan on Billing.
         </p>
+        {isMarketingPlanSlug(planSlug) && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            After sign-in, go to{' '}
+            <span className="font-medium text-foreground">Billing</span> to
+            start your {planSlug} plan trial.
+          </p>
+        )}
       </div>
     )
   }

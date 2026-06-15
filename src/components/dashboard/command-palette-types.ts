@@ -57,11 +57,11 @@ export function buildCommandItems(
       icon: ScrollText,
     })
   }
-  if (options?.showAdmin && basePath === '/dashboard') {
+  if (options?.showAdmin) {
     items.push({
       id: 'admin',
       label: 'Admin',
-      href: '/dashboard/admin',
+      href: basePath === '/demo' ? '/demo/admin' : '/dashboard/admin',
       icon: Shield,
     })
   }

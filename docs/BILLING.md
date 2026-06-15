@@ -12,6 +12,8 @@ Launch Kit supports **multiple payment providers** for organization subscription
 
 Users choose their preferred gateway on the billing page (`/dashboard/billing`) when more than one provider is configured.
 
+**From marketing:** Pricing on `/` links to `/auth/register?plan=` → after signup users land on `/dashboard/billing?plan=` with the matching plan highlighted. Preview the billing UI at `/demo/billing` without signing in. See [MARKETING.md](./MARKETING.md).
+
 ---
 
 ## Architecture overview

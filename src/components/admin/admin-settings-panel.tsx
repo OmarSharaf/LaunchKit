@@ -10,8 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { DEMO_ADMIN_SETTINGS } from '@/lib/demo-admin-data'
 
-export function AdminSettingsPanel() {
+interface AdminSettingsPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminSettingsPanel({
+  isDemo = false,
+}: AdminSettingsPanelProps) {
   const [signupsEnabled, setSignupsEnabled] = useState(true)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -19,6 +26,12 @@ export function AdminSettingsPanel() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
+    if (isDemo) {
+      setSignupsEnabled(DEMO_ADMIN_SETTINGS.signupsEnabled)
+      setLoading(false)
+      return
+    }
+
     fetch('/api/admin/settings')
       .then((res) => res.json())
       .then((data) => {
@@ -28,13 +41,19 @@ export function AdminSettingsPanel() {
       })
       .catch(() => setError('Failed to load settings'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [isDemo])
 
   async function save(nextValue: boolean) {
     setSaving(true)
     setError(null)
     setSaved(false)
     try {
+      if (isDemo) {
+        setSignupsEnabled(nextValue)
+        setSaved(true)
+        return
+      }
+
       const res = await fetch('/api/admin/settings', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

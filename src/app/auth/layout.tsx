@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react'
 import { BrandLogo } from '@/components/brand/brand-logo'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { AUTH_PANEL } from '@/lib/marketing-content'
-import { APP_DESCRIPTION, APP_NAME } from '@/lib/site'
+import { APP_DESCRIPTION, APP_NAME, DEMO_DASHBOARD_PATH } from '@/lib/site'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -41,12 +41,32 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <p className="relative text-sm text-primary-foreground/70">
           {APP_DESCRIPTION}
         </p>
+        <div className="relative flex flex-wrap gap-3 text-sm">
+          <Link
+            href={DEMO_DASHBOARD_PATH}
+            className="rounded-lg bg-white/10 px-3 py-2 font-medium transition-colors hover:bg-white/20"
+          >
+            View live demo
+          </Link>
+          <Link
+            href="/#pricing"
+            className="rounded-lg bg-white/10 px-3 py-2 font-medium transition-colors hover:bg-white/20"
+          >
+            Compare plans
+          </Link>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col">
         <header className="flex h-16 items-center justify-between border-b border-border px-6 lg:border-none lg:px-10">
           <BrandLogo className="lg:hidden" />
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-3">
+            <Link
+              href={DEMO_DASHBOARD_PATH}
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Live demo
+            </Link>
             <ThemeToggle />
             <Link
               href="/"

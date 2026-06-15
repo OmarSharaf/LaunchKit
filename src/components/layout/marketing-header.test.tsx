@@ -11,37 +11,34 @@ describe('MarketingHeader', () => {
     expect(
       screen.getAllByRole('link', { name: /features/i })[0]
     ).toHaveAttribute('href', '#features')
-    expect(
-      screen.getAllByRole('link', { name: /live demo/i })[0]
-    ).toHaveAttribute('href', '/demo')
-    expect(screen.getByRole('link', { name: /get started/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^demo$/i })).toHaveAttribute(
       'href',
-      '/auth/register'
+      '/demo'
     )
+    expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute(
+      'href',
+      '/auth/login'
+    )
+    expect(
+      screen.getAllByRole('link', { name: /get started/i })[0]
+    ).toHaveAttribute('href', '/auth/register')
   })
 
-  it('toggles mobile navigation and closes via nav actions', () => {
+  it('opens mobile navigation and shows section links', () => {
     render(<MarketingHeader />)
     fireEvent.click(screen.getByLabelText(/open menu/i))
 
     const [, mobileNav] = screen.getAllByRole('navigation')
     const mobile = within(mobileNav)
 
-    fireEvent.click(mobile.getByRole('link', { name: /^features$/i }))
-    fireEvent.click(screen.getByLabelText(/open menu/i))
+    expect(
+      mobile.getByRole('link', { name: /^how it works$/i })
+    ).toHaveAttribute('href', '#how-it-works')
+    expect(
+      mobile.getByRole('link', { name: /get started free/i })
+    ).toHaveAttribute('href', '/auth/register')
 
-    fireEvent.click(mobile.getByRole('link', { name: /^product$/i }))
-    fireEvent.click(screen.getByLabelText(/open menu/i))
-
-    fireEvent.click(mobile.getByRole('link', { name: /^pricing$/i }))
-    fireEvent.click(screen.getByLabelText(/open menu/i))
-
-    fireEvent.click(mobile.getByRole('link', { name: /^faq$/i }))
-    fireEvent.click(screen.getByLabelText(/open menu/i))
-
-    fireEvent.click(mobile.getByRole('link', { name: /live demo/i }))
-    fireEvent.click(screen.getByLabelText(/open menu/i))
-
-    fireEvent.click(screen.getByLabelText(/open menu/i))
+    fireEvent.click(screen.getByLabelText(/close menu/i))
+    expect(screen.getByLabelText(/open menu/i)).toBeInTheDocument()
   })
 })

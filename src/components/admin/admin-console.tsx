@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { DemoAdminNotice } from '@/components/admin/demo-admin-notice'
 import { AdminAuditLogsPanel } from '@/components/admin/admin-audit-logs-panel'
 import { AdminBillingPanel } from '@/components/admin/admin-billing-panel'
 import { AdminInvitationsPanel } from '@/components/admin/admin-invitations-panel'
@@ -22,13 +23,15 @@ type TabId = (typeof TABS)[number]['id']
 
 interface AdminConsoleProps {
   overview: React.ReactNode
+  isDemo?: boolean
 }
 
-export function AdminConsole({ overview }: AdminConsoleProps) {
+export function AdminConsole({ overview, isDemo = false }: AdminConsoleProps) {
   const [active, setActive] = useState<TabId>('users')
 
   return (
     <div className="flex flex-col gap-8">
+      {isDemo && <DemoAdminNotice />}
       {overview}
 
       <div
@@ -56,12 +59,14 @@ export function AdminConsole({ overview }: AdminConsoleProps) {
       </div>
 
       <div role="tabpanel">
-        {active === 'users' && <AdminUsersPanel />}
-        {active === 'organizations' && <AdminOrganizationsPanel />}
-        {active === 'invitations' && <AdminInvitationsPanel />}
-        {active === 'billing' && <AdminBillingPanel />}
-        {active === 'audit' && <AdminAuditLogsPanel />}
-        {active === 'settings' && <AdminSettingsPanel />}
+        {active === 'users' && <AdminUsersPanel isDemo={isDemo} />}
+        {active === 'organizations' && (
+          <AdminOrganizationsPanel isDemo={isDemo} />
+        )}
+        {active === 'invitations' && <AdminInvitationsPanel isDemo={isDemo} />}
+        {active === 'billing' && <AdminBillingPanel isDemo={isDemo} />}
+        {active === 'audit' && <AdminAuditLogsPanel isDemo={isDemo} />}
+        {active === 'settings' && <AdminSettingsPanel isDemo={isDemo} />}
       </div>
     </div>
   )

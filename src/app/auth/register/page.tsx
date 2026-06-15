@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { RegisterForm } from '@/components/auth/register-form'
+import { Badge } from '@/components/ui/badge'
+import { getPlanNameFromSlug } from '@/lib/plan-selection'
 import { APP_NAME } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -8,7 +10,16 @@ export const metadata: Metadata = {
   description: `Create your ${APP_NAME} account and start building.`,
 }
 
-export default function RegisterPage() {
+interface RegisterPageProps {
+  searchParams: Promise<{ plan?: string }>
+}
+
+export default async function RegisterPage({
+  searchParams,
+}: RegisterPageProps) {
+  const { plan: planSlug } = await searchParams
+  const selectedPlan = getPlanNameFromSlug(planSlug)
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1 text-center">
@@ -16,9 +27,14 @@ export default function RegisterPage() {
         <p className="text-sm text-muted-foreground">
           Start your 14-day free trial. No credit card required.
         </p>
+        {selectedPlan && (
+          <div className="mt-2 flex justify-center">
+            <Badge variant="secondary">Selected plan: {selectedPlan}</Badge>
+          </div>
+        )}
       </div>
 
-      <RegisterForm />
+      <RegisterForm planSlug={planSlug ?? null} />
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{' '}

@@ -6,8 +6,9 @@ jest.mock('@/components/auth/register-form', () => ({
 }))
 
 describe('RegisterPage', () => {
-  it('renders register page content', () => {
-    render(<RegisterPage />)
+  it('renders register page content', async () => {
+    const ui = await RegisterPage({ searchParams: Promise.resolve({}) })
+    render(ui)
     expect(
       screen.getByRole('heading', { name: /create an account/i })
     ).toBeInTheDocument()
@@ -20,6 +21,14 @@ describe('RegisterPage', () => {
       'href',
       '/terms'
     )
+  })
+
+  it('shows selected plan badge from query', async () => {
+    const ui = await RegisterPage({
+      searchParams: Promise.resolve({ plan: 'pro' }),
+    })
+    render(ui)
+    expect(screen.getByText(/selected plan: pro/i)).toBeInTheDocument()
   })
 
   it('exports metadata', () => {

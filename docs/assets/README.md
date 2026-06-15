@@ -35,3 +35,7 @@ All icons live in [`logos/`](./logos/). Most are from [Simple Icons](https://sim
 ## Reusable markdown grids
 
 Copy blocks from [`logo-grids.md`](./logo-grids.md) into README or docs. Paths are relative to the repo root (`docs/assets/logos/...`).
+
+## Documented in
+
+Logos appear in: [README.md](../../README.md), [MARKETING.md](../MARKETING.md), [BILLING.md](../BILLING.md), [ADMIN.md](../ADMIN.md), [CUSTOMIZATION.md](../CUSTOMIZATION.md), [UI_UX.md](../UI_UX.md), [CI_CD.md](../CI_CD.md), [CHANGELOG.md](../../CHANGELOG.md).

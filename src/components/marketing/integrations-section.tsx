@@ -22,7 +22,7 @@ export function IntegrationsSection() {
           {INTEGRATIONS.map(({ icon: Icon, name, color }) => (
             <div
               key={name}
-              className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="marketing-card-hover flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
                 <Icon className={`h-6 w-6 ${color}`} />

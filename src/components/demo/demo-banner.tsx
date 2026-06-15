@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Github, Play, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DEMO_DASHBOARD_PATH, GITHUB_REPO } from '@/lib/site'
+import { DEMO_ADMIN_PATH, DEMO_DASHBOARD_PATH, GITHUB_REPO } from '@/lib/site'
 
 export function DemoBanner() {
   return (
@@ -10,8 +10,8 @@ export function DemoBanner() {
         <p className="flex items-center justify-center gap-2 font-medium">
           <Sparkles className="h-4 w-4 text-primary" aria-hidden />
           <span>
-            Live demo — full dashboard with analytics, team, billing &amp;
-            settings
+            Live demo — full dashboard with analytics, team, billing, settings
+            &amp; platform admin
           </span>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -26,6 +26,12 @@ export function DemoBanner() {
             >
               <Github className="h-3.5 w-3.5" />
               Fork this layout
+            </Link>
+          </Button>
+          <Button size="sm" variant="ghost" className="gap-1.5" asChild>
+            <Link href={DEMO_ADMIN_PATH}>
+              <Play className="h-3.5 w-3.5" />
+              Admin demo
             </Link>
           </Button>
           <Button size="sm" variant="ghost" className="gap-1.5" asChild>

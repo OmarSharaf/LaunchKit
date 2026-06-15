@@ -22,6 +22,8 @@ export const PRODUCT_CATEGORY =
 export const APP_LOGO_URL = process.env.NEXT_PUBLIC_APP_LOGO_URL?.trim() || ''
 
 export const DEMO_DASHBOARD_PATH = '/demo'
+export const DEMO_ADMIN_PATH = '/demo/admin'
+export const DOCS_HUB_PATH = '/docs'
 export const DESIGN_SYSTEM_PATH = '/design-system'
 export const CUSTOMIZE_DOCS_PATH = '/docs/customization'
 

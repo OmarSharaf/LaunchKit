@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { DEMO_ADMIN_SUBSCRIPTIONS } from '@/lib/demo-admin-data'
 
 interface SubscriptionRow {
   id: string
@@ -33,7 +34,11 @@ interface BillingSummary {
   activeCount: number
 }
 
-export function AdminBillingPanel() {
+interface AdminBillingPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminBillingPanel({ isDemo = false }: AdminBillingPanelProps) {
   const [subscriptions, setSubscriptions] = useState<SubscriptionRow[]>([])
   const [summary, setSummary] = useState<BillingSummary | null>(null)
   const [loading, setLoading] = useState(true)
@@ -43,6 +48,12 @@ export function AdminBillingPanel() {
     setLoading(true)
     setError(null)
     try {
+      if (isDemo) {
+        setSubscriptions(DEMO_ADMIN_SUBSCRIPTIONS.subscriptions)
+        setSummary(DEMO_ADMIN_SUBSCRIPTIONS.summary)
+        return
+      }
+
       const res = await fetch('/api/admin/subscriptions?limit=50')
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed to load billing')
@@ -53,7 +64,7 @@ export function AdminBillingPanel() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [isDemo])
 
   useEffect(() => {
     void loadBilling()

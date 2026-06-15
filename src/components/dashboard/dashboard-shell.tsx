@@ -73,9 +73,9 @@ function getNavItems(
       exact: false,
     })
   }
-  if (options?.showAdmin && basePath === '/dashboard') {
+  if (options?.showAdmin) {
     extra.push({
-      href: '/dashboard/admin',
+      href: basePath === '/demo' ? '/demo/admin' : '/dashboard/admin',
       label: 'Admin',
       icon: Shield,
       exact: false,

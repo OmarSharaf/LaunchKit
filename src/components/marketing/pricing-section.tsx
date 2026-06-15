@@ -13,19 +13,17 @@ import {
 import { SectionHeading } from '@/components/marketing/section-heading'
 import { PLANS } from '@/lib/marketing'
 import { CUSTOMIZE_HINT, PLAN_COMPARISON } from '@/lib/marketing-content'
+import { DEMO_DASHBOARD_PATH } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 export function PricingSection() {
   return (
-    <section
-      id="pricing"
-      className="scroll-mt-20 border-b border-border py-20 md:py-28"
-    >
+    <section id="pricing" className="marketing-section bg-muted/20">
       <div className="container">
         <SectionHeading
           eyebrow="Pricing"
-          title="Example pricing tiers"
-          description="Placeholder plans for your marketing page — edit PLANS in src/lib/marketing.ts. Billing is wired to Stripe, PayPal, and Whop."
+          title="Plans your customers will see"
+          description="Example tiers for your marketing page — checkout on Billing uses your database plans with Stripe, PayPal, or Whop."
         />
         <p className="mx-auto -mt-8 mb-10 max-w-xl text-center text-xs text-muted-foreground">
           {CUSTOMIZE_HINT}
@@ -36,9 +34,9 @@ export function PricingSection() {
             <Card
               key={plan.name}
               className={cn(
-                'relative flex flex-col',
+                'marketing-card-hover relative flex flex-col',
                 plan.highlighted &&
-                  'border-primary shadow-xl shadow-primary/10 ring-1 ring-primary lg:scale-[1.02]'
+                  'border-primary shadow-xl shadow-primary/10 ring-1 ring-primary lg:scale-[1.03]'
               )}
             >
               {plan.highlighted && (
@@ -47,7 +45,14 @@ export function PricingSection() {
                 </Badge>
               )}
               <CardHeader>
-                <CardTitle>{plan.name}</CardTitle>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle>{plan.name}</CardTitle>
+                  {plan.slug && plan.slug !== 'enterprise' && (
+                    <Badge variant="outline" className="text-[10px]">
+                      14-day trial
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription>{plan.description}</CardDescription>
                 <div className="mt-4 flex items-baseline gap-1">
                   <span className="text-4xl font-extrabold tracking-tight">
@@ -90,7 +95,7 @@ export function PricingSection() {
           ))}
         </div>
 
-        <div className="mx-auto mt-16 max-w-4xl overflow-x-auto rounded-xl border border-border">
+        <div className="mx-auto mt-16 max-w-4xl overflow-hidden rounded-xl border border-border bg-card shadow-sm">
           <table className="w-full min-w-[32rem] text-left text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/50">
@@ -104,19 +109,31 @@ export function PricingSection() {
               {PLAN_COMPARISON.features.map((row) => (
                 <tr
                   key={row.name}
-                  className="border-b border-border last:border-0"
+                  className="border-b border-border last:border-0 even:bg-muted/20"
                 >
                   <td className="px-4 py-3 text-muted-foreground">
                     {row.name}
                   </td>
                   <td className="px-4 py-3">{row.starter}</td>
-                  <td className="px-4 py-3 font-medium">{row.pro}</td>
+                  <td className="px-4 py-3 font-medium text-foreground">
+                    {row.pro}
+                  </td>
                   <td className="px-4 py-3">{row.enterprise}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        <p className="mx-auto mt-6 max-w-xl text-center text-sm text-muted-foreground">
+          Want to see billing UI first?{' '}
+          <Link
+            href={`${DEMO_DASHBOARD_PATH}/billing`}
+            className="font-medium text-primary hover:underline"
+          >
+            Open the billing demo
+          </Link>
+        </p>
       </div>
     </section>
   )

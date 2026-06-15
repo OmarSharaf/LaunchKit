@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { filterDemoAdminOrganizations } from '@/lib/demo-admin-data'
 
 interface AdminOrganization {
   id: string
@@ -23,7 +24,13 @@ interface AdminOrganization {
   createdAt: string
 }
 
-export function AdminOrganizationsPanel() {
+interface AdminOrganizationsPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminOrganizationsPanel({
+  isDemo = false,
+}: AdminOrganizationsPanelProps) {
   const [organizations, setOrganizations] = useState<AdminOrganization[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
@@ -34,6 +41,11 @@ export function AdminOrganizationsPanel() {
     setLoading(true)
     setError(null)
     try {
+      if (isDemo) {
+        setOrganizations(filterDemoAdminOrganizations(search))
+        return
+      }
+
       const params = new URLSearchParams({ limit: '50' })
       if (search.trim()) params.set('search', search.trim())
       const res = await fetch(`/api/admin/organizations?${params}`)
@@ -47,13 +59,14 @@ export function AdminOrganizationsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [search])
+  }, [isDemo, search])
 
   useEffect(() => {
     void loadOrganizations()
   }, [loadOrganizations])
 
   async function deleteOrganization(id: string, name: string) {
+    if (isDemo) return
     if (
       !window.confirm(`Delete organization "${name}" and all related data?`)
     ) {

@@ -3,7 +3,6 @@ import type {
   DashboardChartPoint,
   DashboardMetric,
 } from '@/lib/dashboard-types'
-import { DOCS_URL } from '@/lib/site'
 import { formatRelativeDate, isSubscriptionActive } from '@/lib/utils'
 
 type Membership = {
@@ -156,13 +155,14 @@ export function getOnboardingSteps(dbUser: DbUser | null) {
       ? isSubscriptionActive(m.organization.subscription.status)
       : false
   )
+  const hasProfile = Boolean(dbUser?.name?.trim())
 
   return [
     {
-      id: 'env',
-      label: 'Configure .env.local (Supabase + database)',
-      done: false,
-      href: DOCS_URL,
+      id: 'profile',
+      label: 'Complete your profile',
+      done: hasProfile,
+      href: '/dashboard/settings',
     },
     {
       id: 'org',
@@ -171,22 +171,22 @@ export function getOnboardingSteps(dbUser: DbUser | null) {
       href: '/dashboard/settings',
     },
     {
-      id: 'team',
-      label: 'Invite a team member',
-      done: hasMembers,
-      href: '/dashboard/settings',
-    },
-    {
       id: 'billing',
-      label: 'Connect a payment provider',
+      label: 'Choose a subscription plan',
       done: hasPaid,
       href: '/dashboard/billing',
     },
     {
-      id: 'brand',
-      label: 'Customize branding & marketing copy',
-      done: false,
-      href: '/design-system',
+      id: 'team',
+      label: 'Invite a team member',
+      done: hasMembers,
+      href: '/dashboard/team',
+    },
+    {
+      id: 'explore',
+      label: 'Explore analytics & settings',
+      done: hasOrg && hasPaid,
+      href: '/dashboard/analytics',
     },
   ]
 }

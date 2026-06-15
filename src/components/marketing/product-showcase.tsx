@@ -3,15 +3,12 @@ import { ArrowRight, Globe } from 'lucide-react'
 import { SectionHeading } from '@/components/marketing/section-heading'
 import { Button } from '@/components/ui/button'
 import { SHOWCASE_ITEMS } from '@/lib/marketing'
-import { DEMO_DASHBOARD_PATH } from '@/lib/site'
+import { DEMO_ADMIN_PATH, DEMO_DASHBOARD_PATH } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 export function ProductShowcase() {
   return (
-    <section
-      id="showcase"
-      className="scroll-mt-20 border-b border-border py-20 md:py-28"
-    >
+    <section id="showcase" className="marketing-section">
       <div className="container">
         <SectionHeading
           eyebrow="Product"
@@ -21,22 +18,23 @@ export function ProductShowcase() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           {SHOWCASE_ITEMS.map((item, index) => (
-            <div
+            <Link
               key={item.title}
+              href={item.href}
               className={cn(
-                'group relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-xl hover:shadow-primary/5',
+                'marketing-card-hover group relative block overflow-hidden rounded-2xl border border-border bg-card shadow-sm',
                 index === 1 && 'lg:-mt-4 lg:mb-4'
               )}
             >
               <div
                 className={cn(
-                  'absolute inset-0 bg-gradient-to-br opacity-60',
+                  'absolute inset-0 bg-gradient-to-br opacity-60 transition-opacity group-hover:opacity-80',
                   item.gradient
                 )}
                 aria-hidden
               />
               <div className="relative p-6">
-                <div className="mb-6 overflow-hidden rounded-xl border border-border/60 bg-background/80 shadow-inner">
+                <div className="mb-6 overflow-hidden rounded-xl border border-border/60 bg-background/80 shadow-inner transition-transform duration-300 group-hover:scale-[1.02]">
                   <div className="flex gap-1.5 border-b border-border bg-muted/50 px-3 py-2">
                     <span className="h-2 w-2 rounded-full bg-red-400/80" />
                     <span className="h-2 w-2 rounded-full bg-amber-400/80" />
@@ -59,23 +57,32 @@ export function ProductShowcase() {
                 <p className="mt-1 text-sm text-muted-foreground">
                   {item.description}
                 </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                  Preview live
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         <div className="mt-12 flex flex-col items-center gap-4 rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-8 text-center">
           <Globe className="h-10 w-10 text-primary" />
           <p className="max-w-md text-muted-foreground">
-            Walk through the full dashboard — charts, billing, team settings —
-            with zero signup.
+            Walk through the full dashboard — charts, billing, team settings,
+            and platform admin — with zero signup.
           </p>
-          <Button size="lg" asChild>
-            <Link href={DEMO_DASHBOARD_PATH}>
-              Open live demo dashboard
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button size="lg" asChild>
+              <Link href={DEMO_DASHBOARD_PATH}>
+                Open live demo
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href={DEMO_ADMIN_PATH}>Admin demo</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

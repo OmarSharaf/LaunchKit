@@ -16,6 +16,7 @@ interface PlanOption {
   paypalPlanId: string | null
   amount: number
   isPopular: boolean
+  highlighted?: boolean
 }
 
 interface BillingActionsProps {
@@ -264,7 +265,14 @@ export function BillingActions({
       {!hasSubscription && (
         <div className="grid gap-3 sm:grid-cols-2">
           {checkoutPlans.map((plan) => (
-            <div key={plan.id} className="rounded-lg border border-border p-4">
+            <div
+              key={plan.id}
+              className={`rounded-lg border p-4 ${
+                plan.highlighted
+                  ? 'border-primary ring-1 ring-primary/20'
+                  : 'border-border'
+              }`}
+            >
               <p className="font-semibold">{plan.name}</p>
               <p className="text-sm text-muted-foreground">
                 ${(plan.amount / 100).toFixed(0)}/month

@@ -36,11 +36,27 @@ Preview tokens and components at **`/design-system`**. See **[UI_UX.md](./UI_UX.
 
 Edit **`src/lib/marketing.ts`** — a single file controls:
 
-- Stats bar, features, pricing plans, FAQ
-- Navigation and footer links
-- Testimonials and product showcase cards
+- Stats bar, features, pricing plans (`PLANS`), FAQ
+- Navigation (`NAV_LINKS`) and footer links (`FOOTER_LINKS`)
+- Testimonials, product showcase cards, how-it-works steps (`STEPS`)
 
 Supporting copy (auth panel, built-with strip, plan comparison) is in **`src/lib/marketing-content.ts`**.
+
+**Full marketing guide:** [MARKETING.md](./MARKETING.md) — page structure, customer journey, CSS utilities, demo links.
+
+### Customer journey wiring
+
+| Marketing                                      | App                                                               |
+| ---------------------------------------------- | ----------------------------------------------------------------- |
+| `PLANS[].href` → `/auth/register?plan=starter` | Register page shows plan badge                                    |
+| OAuth on register                              | Redirects to `/dashboard/billing?plan=` via callback `next` param |
+| Pricing section                                | Links to `/demo/billing` for UI preview                           |
+
+Helpers: `src/lib/plan-selection.ts`.
+
+### In-app docs hub
+
+Visitors can open **`/docs`** for guide cards linking to ARCHITECTURE, BILLING, ADMIN, and live demos. Constant: `DOCS_HUB_PATH` in `src/lib/site.ts`.
 
 ## 3. Demo dashboard (5 minutes)
 
@@ -48,6 +64,8 @@ Edit **`src/lib/demo-data.ts`** for the public `/demo` experience:
 
 - `DEMO_USER`, `DEMO_ORG`, `DEMO_ORGANIZATIONS`
 - Activity feed, metrics, billing preview, team list
+
+Edit **`src/lib/demo-admin-data.ts`** for the public **`/demo/admin`** platform console preview.
 
 No authentication required — ideal for sales demos. Coach marks and demo hints guide adopters through the layout.
 
@@ -138,17 +156,16 @@ Clients send the key via `X-Api-Key: lk_...` or `Authorization: Bearer lk_...`.
 
 ## 12. Platform admin backend
 
-Set `PLATFORM_ADMIN_EMAILS` in `.env.local` (comma-separated). Those accounts get access to **Dashboard → Admin** when `FEATURE_ADMIN_DASHBOARD=true`.
+See **[ADMIN.md](./ADMIN.md)** for the full guide: setup, login, dashboard tabs, API routes, signup toggle, security, and the public demo at `/demo/admin`.
 
-Platform admins can:
+Quick setup:
 
-- List and search **all users** (signups)
-- **Suspend**, reactivate, or **delete** users (removes Supabase auth + database row)
-- List and **delete organizations**
-- Toggle **new signups** on/off (`platform_settings.signupsEnabled`)
-- View platform-wide metrics and audit events via API
+```env
+FEATURE_ADMIN_DASHBOARD=true
+PLATFORM_ADMIN_EMAILS=you@example.com
+```
 
-Admin API routes (all require platform admin session):
+Platform admins manage **all users and organizations** on the deployment — separate from org-level `ADMIN` roles.
 
 | Method    | Route                           | Purpose                    |
 | --------- | ------------------------------- | -------------------------- |
@@ -171,7 +188,8 @@ Run `npm run db:migrate` after pulling to add `UserStatus` and `platform_setting
 
 | Goal                       | File(s)                                                                                 |
 | -------------------------- | --------------------------------------------------------------------------------------- |
-| Platform admin             | `src/lib/platform-admin.ts`, `src/app/api/admin/*`, `/dashboard/admin`                  |
+| Marketing site             | [MARKETING.md](./MARKETING.md), `src/lib/marketing.ts`, `src/components/marketing/*`    |
+| Platform admin             | [ADMIN.md](./ADMIN.md), `src/lib/platform-admin.ts`, `/dashboard/admin`, `/demo/admin`  |
 | UI / UX patterns           | [UI_UX.md](./UI_UX.md), `src/components/dashboard/*`, `src/styles/globals.css`          |
 | Billing / payment gateways | [BILLING.md](./BILLING.md), `src/lib/stripe.ts`, `src/lib/whop.ts`, `src/lib/paypal.ts` |
 | Doc logos (SVG)            | [assets/README.md](./assets/README.md), [assets/logo-grids.md](./assets/logo-grids.md)  |

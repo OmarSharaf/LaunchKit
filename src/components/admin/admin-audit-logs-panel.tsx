@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { DEMO_ADMIN_AUDIT_LOGS } from '@/lib/demo-admin-data'
 import { formatRelativeDate } from '@/lib/utils'
 
 interface AuditLogRow {
@@ -23,7 +24,13 @@ interface AuditLogRow {
   createdAt: string
 }
 
-export function AdminAuditLogsPanel() {
+interface AdminAuditLogsPanelProps {
+  isDemo?: boolean
+}
+
+export function AdminAuditLogsPanel({
+  isDemo = false,
+}: AdminAuditLogsPanelProps) {
   const [logs, setLogs] = useState<AuditLogRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -32,6 +39,11 @@ export function AdminAuditLogsPanel() {
     setLoading(true)
     setError(null)
     try {
+      if (isDemo) {
+        setLogs(DEMO_ADMIN_AUDIT_LOGS)
+        return
+      }
+
       const res = await fetch('/api/admin/audit-logs?limit=50')
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed to load audit logs')
@@ -41,7 +53,7 @@ export function AdminAuditLogsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [isDemo])
 
   useEffect(() => {
     void loadLogs()

@@ -15,6 +15,8 @@ describe('site constants', () => {
     expect(site.APP_URL).toBe('https://launchkit.dev')
     expect(site.DEVELOPER_NAME).toBe('Omar S. M. Abdelfatah')
     expect(site.DEMO_DASHBOARD_PATH).toBe('/demo')
+    expect(site.DEMO_ADMIN_PATH).toBe('/demo/admin')
+    expect(site.DOCS_HUB_PATH).toBe('/docs')
   })
 
   it('reads branding from environment variables', async () => {

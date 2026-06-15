@@ -29,6 +29,7 @@ export default function DemoLayout({
           { id: 'demo-1', name: DEMO_ORG.name, planName: DEMO_ORG.plan },
         ]}
         activeOrgId="demo-1"
+        showAdmin={true}
       >
         {children}
       </DashboardShell>
