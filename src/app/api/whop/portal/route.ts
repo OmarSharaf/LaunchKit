@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { isWhopEnabled, whop } from '@/lib/whop'
+import { isWhopEnabled, getWhopClient } from '@/lib/whop'
 import { requireAuthApi, requireOrgRole } from '@/lib/auth'
 import { AuthError, ForbiddenError } from '@/lib/errors'
 import { logger } from '@/lib/logger'
@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const whopMembership = await whop.memberships.retrieve(whopMembershipId)
+    const whopMembership =
+      await getWhopClient().memberships.retrieve(whopMembershipId)
 
     if (!whopMembership.manage_url) {
       return NextResponse.json(

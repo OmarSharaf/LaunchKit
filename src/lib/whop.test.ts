@@ -18,11 +18,12 @@ jest.mock('@whop/sdk', () => {
   }))
 })
 
-import { whop } from './whop'
 import {
   createWhopCheckout,
+  getWhopClient,
   isWhopEnabled,
   mapWhopMembershipStatus,
+  resetWhopClient,
   resolveWhopCheckoutUrl,
   unwrapWhopWebhook,
 } from './whop'
@@ -32,10 +33,12 @@ describe('whop helpers', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    resetWhopClient()
     process.env = { ...originalEnv }
     process.env.WHOP_API_KEY = 'whop_test'
     process.env.WHOP_COMPANY_ID = 'biz_test'
     process.env.WHOP_WEBHOOK_SECRET = 'secret'
+    const whop = getWhopClient()
     ;(whop.checkoutConfigurations.create as jest.Mock).mockResolvedValue({
       id: 'ch_test',
       purchase_url: '/checkout/plan_test?session=ch_test',
@@ -47,6 +50,7 @@ describe('whop helpers', () => {
   })
 
   afterEach(() => {
+    resetWhopClient()
     process.env = originalEnv
   })
 
@@ -97,6 +101,7 @@ describe('whop helpers', () => {
         cancelUrl: 'http://localhost/cancel',
       })
 
+      const whop = getWhopClient()
       expect(whop.checkoutConfigurations.create).toHaveBeenCalledWith(
         expect.objectContaining({
           plan_id: 'plan_whop_1',
@@ -119,6 +124,7 @@ describe('whop helpers', () => {
         cancelUrl: 'http://localhost/cancel',
       })
 
+      const whop = getWhopClient()
       expect(whop.checkoutConfigurations.create).toHaveBeenCalledWith(
         expect.objectContaining({
           plan: expect.objectContaining({
@@ -134,6 +140,7 @@ describe('whop helpers', () => {
 
   describe('unwrapWhopWebhook', () => {
     it('verifies webhook signatures via the SDK', () => {
+      const whop = getWhopClient()
       const event = unwrapWhopWebhook('payload', { 'webhook-id': 'msg_1' })
       expect(whop.webhooks.unwrap).toHaveBeenCalled()
       expect(event.type).toBe('test.event')

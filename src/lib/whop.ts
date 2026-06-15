@@ -2,18 +2,33 @@ import Whop from '@whop/sdk'
 import type { MembershipStatus } from '@whop/sdk/resources/shared.js'
 import type { SubscriptionStatus } from '@prisma/client'
 
-// server-only Whop SDK
+// server-only Whop SDK — lazy init so builds work without WHOP_* env vars
+let whopClient: Whop | null = null
+
 function getWebhookKey(): string | undefined {
   const secret = process.env.WHOP_WEBHOOK_SECRET
   if (!secret) return undefined
   return Buffer.from(secret).toString('base64')
 }
 
-export const whop = new Whop({
-  apiKey: process.env.WHOP_API_KEY,
-  webhookKey: getWebhookKey(),
-  baseURL: process.env.WHOP_API_BASE_URL,
-})
+export function getWhopClient(): Whop {
+  if (!whopClient) {
+    const apiKey = process.env.WHOP_API_KEY
+    if (!apiKey) {
+      throw new Error('WHOP_API_KEY is not configured')
+    }
+    whopClient = new Whop({
+      apiKey,
+      webhookKey: getWebhookKey(),
+      baseURL: process.env.WHOP_API_BASE_URL,
+    })
+  }
+  return whopClient
+}
+
+export function resetWhopClient() {
+  whopClient = null
+}
 
 export function isWhopEnabled(): boolean {
   return Boolean(process.env.WHOP_API_KEY && process.env.WHOP_COMPANY_ID)
@@ -67,6 +82,7 @@ export async function createWhopCheckout({
   successUrl: string
   cancelUrl: string
 }) {
+  const whop = getWhopClient()
   const companyId = process.env.WHOP_COMPANY_ID!
   const metadata = { organizationId, planId }
 
@@ -106,5 +122,5 @@ export function unwrapWhopWebhook(
   payload: string,
   headers: Record<string, string>
 ) {
-  return whop.webhooks.unwrap(payload, { headers })
+  return getWhopClient().webhooks.unwrap(payload, { headers })
 }
