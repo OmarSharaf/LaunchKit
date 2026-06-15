@@ -1,16 +1,15 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { SectionHeading } from '@/components/marketing/section-heading'
-import { TESTIMONIALS } from '@/lib/marketing'
-import { APP_NAME } from '@/lib/site'
+import { TESTIMONIALS, TESTIMONIALS_SECTION } from '@/lib/marketing'
 
 export function TestimonialsSection() {
   return (
     <section className="border-b border-border bg-muted/30 py-20 md:py-28">
       <div className="container">
         <SectionHeading
-          eyebrow="Testimonials"
-          title="Trusted by founders who ship fast"
-          description={`Teams rely on ${APP_NAME} to unify operations, billing, and analytics in one workspace.`}
+          eyebrow={TESTIMONIALS_SECTION.eyebrow}
+          title={TESTIMONIALS_SECTION.title}
+          description={TESTIMONIALS_SECTION.description}
         />
 
         <div className="grid gap-6 md:grid-cols-3">

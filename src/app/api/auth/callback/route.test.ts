@@ -5,7 +5,9 @@ import { NextRequest } from 'next/server'
 import { createMockSupabaseAuth, mockUser } from '@/test-utils'
 
 const mockExchangeCode = jest.fn()
+const mockSignOut = jest.fn()
 const mockUpsert = jest.fn()
+const mockFindUnique = jest.fn()
 
 jest.mock('@/lib/supabase/server', () => ({
   createClient: jest.fn(),
@@ -13,8 +15,20 @@ jest.mock('@/lib/supabase/server', () => ({
 
 jest.mock('@/lib/prisma', () => ({
   prisma: {
-    user: { upsert: (...args: unknown[]) => mockUpsert(...args) },
+    user: {
+      findUnique: (...args: unknown[]) => mockFindUnique(...args),
+      upsert: (...args: unknown[]) => mockUpsert(...args),
+    },
   },
+}))
+
+jest.mock('@/lib/platform-settings', () => ({
+  areSignupsEnabled: jest.fn().mockResolvedValue(true),
+}))
+
+jest.mock('@/lib/platform-admin', () => ({
+  syncPlatformAdminFlag: jest.fn().mockResolvedValue(undefined),
+  assertUserCanAccessApp: jest.fn().mockResolvedValue(undefined),
 }))
 
 jest.mock('@/lib/organizations', () => ({
@@ -36,9 +50,12 @@ describe('GET /api/auth/callback', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockUpsert.mockResolvedValue({})
+    mockFindUnique.mockResolvedValue({ id: mockUser.id })
+    mockSignOut.mockResolvedValue({})
     mockCreateClient.mockResolvedValue({
       auth: createMockSupabaseAuth({
         exchangeCodeForSession: mockExchangeCode,
+        signOut: mockSignOut,
       }),
     } as never)
   })

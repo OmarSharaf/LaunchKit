@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import { Sparkles } from 'lucide-react'
 import { BrandLogo } from '@/components/brand/brand-logo'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { AUTH_PANEL } from '@/lib/marketing-content'
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/site'
-import { Sparkles } from 'lucide-react'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -25,17 +26,16 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <Sparkles className="h-5 w-5" />
             </span>
             <span className="text-lg font-semibold tracking-tight">
-              Launch faster
+              {AUTH_PANEL.eyebrow}
             </span>
           </Link>
         </div>
         <blockquote className="relative max-w-md">
           <p className="text-2xl font-semibold leading-snug tracking-tight">
-            &ldquo;{APP_NAME} brings your team, billing, and insights into one
-            place — so you can focus on growth.&rdquo;
+            &ldquo;{AUTH_PANEL.quote(APP_NAME)}&rdquo;
           </p>
           <footer className="mt-6 text-sm text-primary-foreground/80">
-            Trusted by teams worldwide
+            {AUTH_PANEL.footer}
           </footer>
         </blockquote>
         <p className="relative text-sm text-primary-foreground/70">

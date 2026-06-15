@@ -1,3 +1,4 @@
+// relative in-app paths only — blocks //evil.com style open redirects
 export function getSafeRedirectPath(
   target: string | null | undefined,
   fallback = '/dashboard'

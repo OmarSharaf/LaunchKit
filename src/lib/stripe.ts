@@ -1,22 +1,11 @@
 import Stripe from 'stripe'
 
-/**
- * Stripe server SDK — never import this from client components.
- * Webhooks and checkout routes live under src/app/api/stripe/*.
- */
-
+// server-only Stripe SDK
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-02-24.acacia',
   typescript: true,
 })
 
-// ─────────────────────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────────────────────
-
-/**
- * Creates a Stripe Checkout session for a new subscription.
- */
 export async function createCheckoutSession({
   priceId,
   customerId,
@@ -48,9 +37,6 @@ export async function createCheckoutSession({
   })
 }
 
-/**
- * Creates a Stripe Billing Portal session so users can manage their subscription.
- */
 export async function createBillingPortalSession({
   customerId,
   returnUrl,
@@ -64,9 +50,6 @@ export async function createBillingPortalSession({
   })
 }
 
-/**
- * Retrieves or creates a Stripe customer for an organization.
- */
 export async function getOrCreateStripeCustomer({
   organizationId,
   organizationName,
@@ -89,9 +72,6 @@ export async function getOrCreateStripeCustomer({
   })
 }
 
-/**
- * Constructs and verifies a Stripe webhook event.
- */
 export function constructStripeEvent(
   payload: string | Buffer,
   signature: string
@@ -102,10 +82,6 @@ export function constructStripeEvent(
     process.env.STRIPE_WEBHOOK_SECRET!
   )
 }
-
-// ─────────────────────────────────────────────────────────────
-// FORMATTERS
-// ─────────────────────────────────────────────────────────────
 
 export function formatPrice(
   amount: number,

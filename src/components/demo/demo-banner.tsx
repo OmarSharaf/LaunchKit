@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { Play, Sparkles } from 'lucide-react'
+import { Github, Play, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DEMO_DASHBOARD_PATH } from '@/lib/site'
+import { DEMO_DASHBOARD_PATH, GITHUB_REPO } from '@/lib/site'
 
 export function DemoBanner() {
   return (
@@ -19,13 +19,23 @@ export function DemoBanner() {
             <Link href="/">Homepage</Link>
           </Button>
           <Button size="sm" variant="ghost" className="gap-1.5" asChild>
+            <Link
+              href={`${GITHUB_REPO}/blob/main/src/components/dashboard/dashboard-shell.tsx`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="h-3.5 w-3.5" />
+              Fork this layout
+            </Link>
+          </Button>
+          <Button size="sm" variant="ghost" className="gap-1.5" asChild>
             <Link href={DEMO_DASHBOARD_PATH}>
               <Play className="h-3.5 w-3.5" />
               Overview
             </Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/auth/register">Start free trial</Link>
+            <Link href="/auth/register">Get started</Link>
           </Button>
         </div>
       </div>

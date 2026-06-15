@@ -26,6 +26,29 @@
 
 <br />
 
+<p align="center">
+  <strong>Core stack</strong><br /><br />
+  <a href="https://nextjs.org" title="Next.js"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="40" height="40" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org" title="TypeScript"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/typescript.svg" width="40" height="40" alt="TypeScript" /></a>
+  <a href="https://react.dev" title="React"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/react.svg" width="40" height="40" alt="React" /></a>
+  <a href="https://supabase.com" title="Supabase"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="40" height="40" alt="Supabase" /></a>
+  <a href="https://prisma.io" title="Prisma"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/prisma.svg" width="40" height="40" alt="Prisma" /></a>
+  <a href="https://tailwindcss.com" title="Tailwind CSS"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/tailwindcss.svg" width="40" height="40" alt="Tailwind CSS" /></a>
+  <a href="https://resend.com" title="Resend"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/resend.svg" width="40" height="40" alt="Resend" /></a>
+  <a href="https://vercel.com" title="Vercel"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/vercel.svg" width="40" height="40" alt="Vercel" /></a>
+</p>
+
+<p align="center">
+  <strong>Payment gateways</strong> &nbsp;·&nbsp; Stripe (default) · Whop · PayPal (optional)<br /><br />
+  <a href="https://stripe.com" title="Stripe"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="48" height="48" alt="Stripe" /></a>
+  &nbsp;&nbsp;
+  <a href="https://whop.com" title="Whop"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="48" height="48" alt="Whop" /></a>
+  &nbsp;&nbsp;
+  <a href="https://www.paypal.com" title="PayPal"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="48" height="48" alt="PayPal" /></a>
+</p>
+
+<br />
+
 **[🚀 Live Demo](https://www.omarsharaf.me)** &nbsp;·&nbsp; **[📖 Docs](https://github.com/OmarSharaf/launchkit#-table-of-contents)** &nbsp;·&nbsp; **[🐛 Report Bug](https://github.com/OmarSharaf/launchkit/issues)** &nbsp;·&nbsp; **[✨ Request Feature](https://github.com/OmarSharaf/launchkit/issues)**
 
 <br />
@@ -49,6 +72,7 @@
 - [Routes & API](#-routes--api)
 - [Authentication Flow](#-authentication-flow)
 - [Billing Flow](#-billing-flow)
+- [Payment Gateways](./docs/BILLING.md)
 - [Database Schema](#️-database-schema)
 - [Testing](#-testing)
 - [CI/CD](#-cicd)
@@ -67,12 +91,12 @@
 | --------------------------- | --------------------------------------------------------------------------------------------- |
 | 🔐 **Authentication**       | Email/password, Google OAuth, GitHub OAuth, password reset — Supabase Auth + Prisma user sync |
 | 🏢 **Multi-tenancy**        | Organizations, members, roles (`SUPER_ADMIN` / `ADMIN` / `MEMBER`), invitations in Prisma     |
-| 💳 **Stripe billing**       | Checkout sessions, webhooks, billing portal helpers, seeded plans                             |
+| 💳 **Billing**              | Stripe (default) + optional Whop & PayPal; checkout, webhooks, portals, multi-gateway UI      |
 | 🛡️ **Route protection**     | Middleware session refresh + redirects for `/dashboard` and `/auth`                           |
 | 🎭 **Live demo**            | Public `/demo` dashboard with mock data — no sign-in required                                 |
 | 🌐 **Marketing site**       | Full landing page: hero, stats, features, showcase, integrations, pricing, FAQ, testimonials  |
-| 🎨 **UI system**            | shadcn/ui + Radix UI + Tailwind CSS + dark mode (`next-themes`)                               |
-| 🧩 **Dashboard shell**      | Shared sidebar layout for real app and demo (`DashboardShell`)                                |
+| 🎨 **UI system**            | shadcn/ui + Radix UI + Tailwind CSS + dark mode + **theme presets** (`/design-system`)        |
+| 🧩 **Dashboard shell**      | Org switcher, ⌘K command palette, mobile nav, loading skeletons, empty states                 |
 | 🏷️ **White-label branding** | App name, tagline, URLs, and developer credit via environment variables                       |
 | 🗄️ **Type-safe database**   | PostgreSQL + Prisma — migrations, seed script, composed TypeScript types                      |
 | 📧 **Email (Resend)**       | API key wired in env — ready for transactional email                                          |
@@ -86,19 +110,39 @@
 
 ## 🖥️ Tech Stack
 
-| Layer     | Technology                                    | Why                                              |
-| --------- | --------------------------------------------- | ------------------------------------------------ |
-| Framework | **Next.js 15** (App Router)                   | Server Components, Server Actions, Turbopack dev |
-| Language  | **TypeScript 5.6** (strict)                   | End-to-end type safety                           |
-| Auth      | **Supabase Auth** + `@supabase/ssr`           | OAuth, sessions, cookie handling for SSR         |
-| Database  | **PostgreSQL** + **Prisma**                   | Relational model, migrations, typed queries      |
-| Payments  | **Stripe**                                    | Checkout, subscriptions, webhooks, portal        |
-| Email     | **Resend**                                    | Transactional email API                          |
-| UI        | **Tailwind CSS**, **shadcn/ui**, **Radix UI** | Accessible, customizable components              |
-| Forms     | **React Hook Form** + **Zod**                 | Client validation aligned with server schemas    |
-| State     | **Zustand**                                   | Lightweight client state (where needed)          |
-| Testing   | **Jest** + **React Testing Library**          | Unit/integration tests with coverage gates       |
-| Fonts     | **Geist**                                     | Sans + mono via `geist` package                  |
+<p align="center">
+  <a href="https://nextjs.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="36" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/typescript.svg" width="36" alt="TypeScript" /></a>
+  <a href="https://react.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/react.svg" width="36" alt="React" /></a>
+  <a href="https://supabase.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="36" alt="Supabase" /></a>
+  <a href="https://www.postgresql.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/postgresql.svg" width="36" alt="PostgreSQL" /></a>
+  <a href="https://prisma.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/prisma.svg" width="36" alt="Prisma" /></a>
+  <a href="https://tailwindcss.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/tailwindcss.svg" width="36" alt="Tailwind" /></a>
+  <a href="https://www.radix-ui.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/radixui.svg" width="36" alt="Radix UI" /></a>
+  <a href="https://zod.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/zod.svg" width="36" alt="Zod" /></a>
+  <a href="https://react-hook-form.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/reacthookform.svg" width="36" alt="React Hook Form" /></a>
+  <a href="https://resend.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/resend.svg" width="36" alt="Resend" /></a>
+  <a href="https://jestjs.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/jest.svg" width="36" alt="Jest" /></a>
+  <a href="https://playwright.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/playwright.svg" width="36" alt="Playwright" /></a>
+  <a href="https://posthog.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/posthog.svg" width="36" alt="PostHog" /></a>
+  <a href="https://sentry.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/sentry.svg" width="36" alt="Sentry" /></a>
+</p>
+
+| Layer     | Technology                                                                                                                                                                | Why                                              |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Framework | ![Next.js](docs/assets/logos/nextdotjs.svg) **Next.js 15** (App Router)                                                                                                   | Server Components, Server Actions, Turbopack dev |
+| Language  | ![TypeScript](docs/assets/logos/typescript.svg) **TypeScript 5.6** (strict)                                                                                               | End-to-end type safety                           |
+| Auth      | ![Supabase](docs/assets/logos/supabase.svg) **Supabase Auth** + `@supabase/ssr`                                                                                           | OAuth, sessions, cookie handling for SSR         |
+| Database  | ![PostgreSQL](docs/assets/logos/postgresql.svg) **PostgreSQL** + ![Prisma](docs/assets/logos/prisma.svg) **Prisma**                                                       | Relational model, migrations, typed queries      |
+| Payments  | ![Stripe](docs/assets/logos/stripe.svg) **Stripe** (default), ![Whop](docs/assets/logos/whop.svg) **Whop**, ![PayPal](docs/assets/logos/paypal.svg) **PayPal** (optional) | Checkout, subscriptions, webhooks, portals       |
+| Email     | ![Resend](docs/assets/logos/resend.svg) **Resend**                                                                                                                        | Transactional email API                          |
+| UI        | ![Tailwind](docs/assets/logos/tailwindcss.svg) **Tailwind CSS**, **shadcn/ui**, ![Radix](docs/assets/logos/radixui.svg) **Radix UI**                                      | Accessible, customizable components              |
+| Forms     | **React Hook Form** + ![Zod](docs/assets/logos/zod.svg) **Zod**                                                                                                           | Client validation aligned with server schemas    |
+| State     | **Zustand**                                                                                                                                                               | Lightweight client state (where needed)          |
+| Testing   | ![Jest](docs/assets/logos/jest.svg) **Jest** + **React Testing Library**, ![Playwright](docs/assets/logos/playwright.svg) **Playwright**                                  | Unit/integration + E2E smoke tests               |
+| Fonts     | **Geist**                                                                                                                                                                 | Sans + mono via `geist` package                  |
+| Deploy    | ![Vercel](docs/assets/logos/vercel.svg) **Vercel** (recommended), ![Docker](docs/assets/logos/docker.svg) **Docker** / VPS                                                | Production hosting                               |
+| CI        | ![GitHub Actions](docs/assets/logos/githubactions.svg) **GitHub Actions**                                                                                                 | Lint, test, build, provenance                    |
 
 ---
 
@@ -106,10 +150,20 @@
 
 ### Prerequisites
 
+<p align="center">
+  <a href="https://nodejs.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nodedotjs.svg" width="32" alt="Node.js" /></a>
+  <a href="https://supabase.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="32" alt="Supabase" /></a>
+  <a href="https://stripe.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="32" alt="Stripe" /></a>
+  <a href="https://whop.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="32" alt="Whop" /></a>
+  <a href="https://www.paypal.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="32" alt="PayPal" /></a>
+  <a href="https://resend.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/resend.svg" width="32" alt="Resend" /></a>
+</p>
+
 - **Node.js** `>=18.17`
 - **npm** `>=9.0`
 - [**Supabase**](https://supabase.com) project
 - [**Stripe**](https://stripe.com) account (test mode is fine)
+- Optional: [**Whop**](https://whop.com) and/or [**PayPal Developer**](https://developer.paypal.com) accounts for alternate gateways
 - [**Resend**](https://resend.com) account (when you send email)
 
 ### 1. Clone and install
@@ -186,7 +240,7 @@ Copy the `whsec_...` secret into `STRIPE_WEBHOOK_SECRET` in `.env.local`.
 
 ## 🎭 Live Demo
 
-LaunchKit includes a **public demo** at `/demo` that mirrors the real dashboard UX using static mock data from `src/lib/demo-data.ts`:
+Launch Kit includes a **public demo** at `/demo` that mirrors the real dashboard UX using static mock data from `src/lib/demo-data.ts`:
 
 - Overview with metrics, activity feed, and workspace cards
 - Billing and settings preview pages
@@ -201,18 +255,23 @@ The marketing header links to `/demo` as **Live demo** (`DEMO_DASHBOARD_PATH` in
 
 ## 🏷️ Customize Your Product
 
+See **[docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md)** for branding, marketing, demo data, and billing setup. UI patterns (theme presets, command palette, empty states) are in **[docs/UI_UX.md](./docs/UI_UX.md)**.
+
 ### Branding (`src/lib/site.ts` + env)
 
-| Env variable                   | Default                      | Used for                   |
-| ------------------------------ | ---------------------------- | -------------------------- |
-| `NEXT_PUBLIC_APP_NAME`         | LaunchKit                    | Title, logo text, metadata |
-| `NEXT_PUBLIC_APP_TAGLINE`      | (see `.env.example`)         | Hero headline              |
-| `NEXT_PUBLIC_APP_DESCRIPTION`  | —                            | Meta description, footer   |
-| `NEXT_PUBLIC_PRODUCT_CATEGORY` | Business operations platform | Hero eyebrow               |
-| `NEXT_PUBLIC_APP_URL`          | —                            | Canonical URL, Open Graph  |
-| `NEXT_PUBLIC_GITHUB_REPO`      | This repo                    | Links                      |
-| `NEXT_PUBLIC_DOCS_URL`         | —                            | Help center / docs links   |
-| `NEXT_PUBLIC_SUPPORT_EMAIL`    | support@launchkit.dev        | FAQ, contact               |
+| Env variable                   | Default                  | Used for                   |
+| ------------------------------ | ------------------------ | -------------------------- |
+| `NEXT_PUBLIC_APP_NAME`         | Launch Kit               | Title, logo text, metadata |
+| `NEXT_PUBLIC_APP_TAGLINE`      | (see `.env.example`)     | Hero headline              |
+| `NEXT_PUBLIC_APP_DESCRIPTION`  | —                        | Meta description, footer   |
+| `NEXT_PUBLIC_PRODUCT_CATEGORY` | Open-source SaaS starter | Hero eyebrow               |
+| `NEXT_PUBLIC_APP_URL`          | —                        | Canonical URL, Open Graph  |
+| `NEXT_PUBLIC_APP_LOGO_URL`     | —                        | Optional logo image URL    |
+| `NEXT_PUBLIC_THEME_PRESET`     | `default`                | CSS theme preset           |
+| `NEXT_PUBLIC_DEMO_URL`         | `{APP_URL}/demo`         | Full demo URL for sharing  |
+| `NEXT_PUBLIC_GITHUB_REPO`      | This repo                | Links                      |
+| `NEXT_PUBLIC_DOCS_URL`         | —                        | Help center / docs links   |
+| `NEXT_PUBLIC_SUPPORT_EMAIL`    | support@launchkit.dev    | FAQ, contact               |
 
 ### Marketing content (`src/lib/marketing.ts`)
 
@@ -248,7 +307,12 @@ launchkit/
 │   │   └── api/
 │   │       ├── auth/callback/ # OAuth + email link → Prisma user sync
 │   │       ├── stripe/checkout/
-│   │       └── webhooks/stripe/
+│   │       ├── whop/checkout/
+│   │       ├── paypal/checkout/
+│   │       └── webhooks/
+│   │           ├── stripe/
+│   │           ├── whop/
+│   │           └── paypal/
 │   │
 │   ├── components/
 │   │   ├── ui/                # Button, Card, Input, Toast, …
@@ -267,7 +331,9 @@ launchkit/
 │   │   ├── marketing.ts       # Landing page content
 │   │   ├── site.ts            # Branding constants from env
 │   │   ├── prisma.ts          # Prisma singleton
-│   │   ├── stripe.ts          # Checkout, portal, webhook helpers
+│   │   ├── stripe.ts          # Stripe checkout, portal, webhook helpers
+│   │   ├── whop.ts            # Whop checkout, portal, webhook helpers
+│   │   ├── paypal.ts          # PayPal checkout, portal, webhook helpers
 │   │   ├── supabase/          # Browser + server clients
 │   │   ├── utils.ts           # cn, slugify, formatters, …
 │   │   └── validations.ts     # Zod schemas
@@ -285,7 +351,12 @@ launchkit/
 │   ├── workflows/ci.yml       # Lint, test, build on PR
 │   ├── workflows/release.yml  # Tagged releases
 │   └── ci.env                 # Dummy env for CI builds
-├── docs/CI_CD.md              # CI/CD and deployment guide
+├── docs/
+│   ├── assets/                # SVG logos for docs & README (see assets/README.md)
+│   ├── BILLING.md             # Stripe, Whop, PayPal setup
+│   ├── CUSTOMIZATION.md       # Branding & fork guide
+│   ├── UI_UX.md               # Dashboard & marketing UX
+│   └── CI_CD.md               # CI/CD and deployment guide
 ├── .env.example
 ├── vercel.json
 ├── README.md
@@ -330,7 +401,16 @@ Middleware also treats `/org`, `/settings`, and `/billing` prefixes as protected
 | ------ | ---------------------- | ------------------------------------------------------------ |
 | `GET`  | `/api/auth/callback`   | Supabase OAuth / email link callback; upserts user in Prisma |
 | `POST` | `/api/stripe/checkout` | Create Stripe Checkout session                               |
+| `POST` | `/api/stripe/portal`   | Open Stripe Billing Portal                                   |
 | `POST` | `/api/webhooks/stripe` | Stripe subscription lifecycle events                         |
+| `POST` | `/api/whop/checkout`   | Create Whop hosted checkout (optional)                       |
+| `POST` | `/api/whop/portal`     | Open Whop membership management (optional)                   |
+| `POST` | `/api/webhooks/whop`   | Whop membership lifecycle events (optional)                  |
+| `POST` | `/api/paypal/checkout` | Create PayPal subscription checkout (optional)               |
+| `POST` | `/api/paypal/portal`   | Open PayPal autopay management (optional)                    |
+| `POST` | `/api/webhooks/paypal` | PayPal subscription lifecycle events (optional)              |
+
+See **[docs/BILLING.md](./docs/BILLING.md)** for full setup guides for Stripe, Whop, and PayPal.
 
 ---
 
@@ -366,19 +446,29 @@ The callback route also supports **magic-link** flows from Supabase; add a magic
 
 ## 💳 Billing Flow
 
+<p align="center">
+  <a href="https://stripe.com" title="Stripe — default gateway"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="56" alt="Stripe" /></a>
+  &nbsp;&nbsp;
+  <a href="https://whop.com" title="Whop — optional"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="56" alt="Whop" /></a>
+  &nbsp;&nbsp;
+  <a href="https://www.paypal.com" title="PayPal — optional"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="56" alt="PayPal" /></a>
+</p>
+
+Launch Kit supports **Stripe** (default), **Whop**, and **PayPal** as payment gateways. Users pick their preferred method on the billing page when multiple providers are configured.
+
 ```
-Client              API                    Stripe              Prisma
+Client              API                    Provider            Prisma
   │                  │                       │                   │
-  │ POST /api/stripe/checkout                │                   │
-  │ { priceId, orgId } ─>│ verify membership ──────────────────>│
+  │ POST /api/{stripe|whop|paypal}/checkout  │                   │
+  │ { planId, orgId } ─>│ verify membership ──────────────────>│
   │                  │── create session ───>│                   │
   │<── { url } ──────│                       │                   │
-  │ redirect to Stripe ─────────────────────>│                   │
-  │                  │<── webhook: checkout.session.completed ─│
+  │ redirect to provider ───────────────────>│                   │
+  │                  │<── webhook: subscription event ─────────│
   │                  │── upsert subscription ─────────────────>│
 ```
 
-**Webhook events handled:**
+**Stripe webhook events:**
 
 | Event                           | Action                        |
 | ------------------------------- | ----------------------------- |
@@ -386,6 +476,12 @@ Client              API                    Stripe              Prisma
 | `customer.subscription.updated` | Sync status and period dates  |
 | `customer.subscription.deleted` | Mark subscription `CANCELED`  |
 | `invoice.payment_failed`        | Mark subscription `PAST_DUE`  |
+
+**Whop webhook events:** `membership.activated`, `membership.deactivated`, `membership.cancel_at_period_end_changed`, `payment.failed`
+
+**PayPal webhook events:** `BILLING.SUBSCRIPTION.ACTIVATED`, `BILLING.SUBSCRIPTION.UPDATED`, `BILLING.SUBSCRIPTION.CANCELLED`, `BILLING.SUBSCRIPTION.SUSPENDED`, `BILLING.SUBSCRIPTION.PAYMENT.FAILED`
+
+Full setup, env vars, and migration notes: **[docs/BILLING.md](./docs/BILLING.md)**
 
 ---
 
@@ -397,9 +493,12 @@ User ──< OrganizationMember >── Organization
                     ┌─────────────────┼─────────────────┐
                     ▼                 ▼                 ▼
               Subscription      Invitation         AuditLog
+              (paymentProvider,
+               stripe/whop/paypal IDs)
                     │
                     ▼
                   Plan
+                  (stripe/whop/paypal plan IDs)
 ```
 
 **Design notes:**
@@ -502,7 +601,10 @@ npm run db:seed
 ```
 
 3. Add your production URL to Supabase redirect URLs.
-4. Register `https://your-domain.com/api/webhooks/stripe` in Stripe.
+4. Register webhooks:
+   - Stripe: `https://your-domain.com/api/webhooks/stripe`
+   - Whop (optional): `https://your-domain.com/api/webhooks/whop`
+   - PayPal (optional): `https://your-domain.com/api/webhooks/paypal`
 
 ### Other hosts
 
@@ -523,6 +625,9 @@ See [SECURITY.md](./SECURITY.md) for a production security checklist.
 - [x] Supabase auth (email, OAuth, password reset)
 - [x] Multi-org tenancy, invitations, and org API routes
 - [x] Stripe checkout, webhooks, billing portal API
+- [x] Whop payment gateway (optional)
+- [x] PayPal payment gateway (optional)
+- [x] Multi-provider billing UI on dashboard
 - [x] Marketing landing page + public demo dashboard
 - [x] Dashboard shell, dark mode, CSP/HSTS security headers
 - [x] Prisma migrations + seed (Stripe price IDs via env)
@@ -533,9 +638,9 @@ See [SECURITY.md](./SECURITY.md) for a production security checklist.
 
 - [ ] Usage-based / metered billing
 - [x] Transactional email plumbing (Resend + invite emails)
-- [ ] Audit log UI (server-side `audit` helper ready)
-- [ ] Admin super-dashboard
-- [ ] API keys for integrations
+- [x] Audit log UI and server-side audit helper
+- [x] Platform admin dashboard (users, orgs, signups toggle)
+- [x] API keys (org-scoped CRUD + `requireApiKey` helper for custom routes)
 
 **v1.2 — Enterprise**
 
@@ -608,7 +713,7 @@ Copyright (c) 2026 Omar S. M. Abdelfatah
 
 <br />
 
-**If LaunchKit saved you time, please ⭐ star the repo.**
+**If Launch Kit saved you time, please ⭐ star the repo.**
 
 <br />
 

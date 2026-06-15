@@ -38,6 +38,8 @@ import {
   requireAuth,
   requireAuthApi,
   requireGuest,
+  requireOrgMember,
+  requireOrgRole,
 } from './auth'
 import { mockDbUser, mockUser } from '@/test-utils'
 
@@ -138,6 +140,35 @@ describe('auth', () => {
       mockGetUser.mockResolvedValue({ data: { user: null } })
       const result = await getOrganizationMembership('test-org')
       expect(result).toBeNull()
+    })
+  })
+
+  describe('requireOrgRole', () => {
+    it('returns membership when role matches', async () => {
+      const membership = {
+        role: 'ADMIN',
+        organization: { id: 'org-1', name: 'Test' },
+      }
+      mockFindFirst.mockResolvedValue(membership)
+
+      const result = await requireOrgRole('org-1', 'user-1')
+      expect(result).toEqual(membership)
+    })
+
+    it('throws ForbiddenError when not a member', async () => {
+      mockFindFirst.mockResolvedValue(null)
+      await expect(requireOrgRole('org-1', 'user-1')).rejects.toThrow(
+        'Admin access required'
+      )
+    })
+  })
+
+  describe('requireOrgMember', () => {
+    it('throws ForbiddenError when not a member', async () => {
+      mockFindFirst.mockResolvedValue(null)
+      await expect(requireOrgMember('org-1', 'user-1')).rejects.toThrow(
+        'Organization access required'
+      )
     })
   })
 })

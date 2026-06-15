@@ -22,6 +22,9 @@ describe('RegisterForm', () => {
     mockCreateClient.mockReturnValue({
       auth: createMockSupabaseAuth({ signUp }),
     })
+    global.fetch = jest.fn().mockResolvedValue({
+      json: async () => ({ signupsEnabled: true }),
+    }) as jest.Mock
   })
 
   it('renders registration fields', () => {

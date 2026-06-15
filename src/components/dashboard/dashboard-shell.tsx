@@ -10,13 +10,21 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
-  Search,
+  ScrollText,
   Settings,
+  Shield,
   Users,
   X,
 } from 'lucide-react'
 import { BrandLogo } from '@/components/brand/brand-logo'
+import { buildCommandItems } from '@/components/dashboard/command-palette-types'
+import { DashboardCommandMenu } from '@/components/dashboard/dashboard-command-menu'
 import { DashboardNotifications } from '@/components/dashboard/dashboard-notifications'
+import { MobileBottomNav } from '@/components/dashboard/mobile-bottom-nav'
+import {
+  OrgSwitcher,
+  type OrgOption,
+} from '@/components/dashboard/org-switcher'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { DEMO_NOTIFICATIONS } from '@/lib/demo-data'
@@ -24,8 +32,11 @@ import { cn } from '@/lib/utils'
 
 type BasePath = '/dashboard' | '/demo'
 
-function getNavItems(basePath: BasePath) {
-  return [
+function getNavItems(
+  basePath: BasePath,
+  options?: { showAudit?: boolean; showAdmin?: boolean }
+) {
+  const items = [
     { href: basePath, label: 'Overview', icon: LayoutDashboard, exact: true },
     {
       href: `${basePath}/analytics`,
@@ -52,6 +63,26 @@ function getNavItems(basePath: BasePath) {
       exact: false,
     },
   ] as const
+
+  const extra = []
+  if (options?.showAudit && basePath === '/dashboard') {
+    extra.push({
+      href: '/dashboard/audit',
+      label: 'Audit log',
+      icon: ScrollText,
+      exact: false,
+    })
+  }
+  if (options?.showAdmin && basePath === '/dashboard') {
+    extra.push({
+      href: '/dashboard/admin',
+      label: 'Admin',
+      icon: Shield,
+      exact: false,
+    })
+  }
+
+  return [...items, ...extra]
 }
 
 interface DashboardShellProps {
@@ -60,8 +91,12 @@ interface DashboardShellProps {
   userEmail: string
   orgName?: string
   planName?: string
+  organizations?: OrgOption[]
+  activeOrgId?: string
   basePath?: BasePath
   isDemo?: boolean
+  showAudit?: boolean
+  showAdmin?: boolean
   signOutAction?: () => Promise<void>
 }
 
@@ -71,15 +106,27 @@ export function DashboardShell({
   userEmail,
   orgName,
   planName,
+  organizations = [],
+  activeOrgId,
   basePath = '/dashboard',
   isDemo = false,
+  showAudit = false,
+  showAdmin = false,
   signOutAction,
 }: DashboardShellProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const initials =
     userName[0]?.toUpperCase() ?? userEmail[0]?.toUpperCase() ?? 'U'
-  const navItems = getNavItems(basePath)
+  const navItems = getNavItems(basePath, { showAudit, showAdmin })
+  const commandItems = buildCommandItems(basePath, { showAudit, showAdmin })
+
+  const orgSwitcherData =
+    organizations.length > 0
+      ? organizations
+      : orgName
+        ? [{ id: 'default', name: orgName, planName }]
+        : []
 
   const sidebar = (
     <>
@@ -87,14 +134,11 @@ export function DashboardShell({
         <BrandLogo size="sm" href={isDemo ? '/' : '/'} />
       </div>
 
-      {orgName && (
-        <div className="border-b border-border bg-muted/20 px-4 py-3">
-          <p className="truncate text-sm font-semibold">{orgName}</p>
-          <p className="text-xs text-muted-foreground">
-            {planName ?? 'Free'} plan
-            {isDemo && ' · Preview'}
-          </p>
-        </div>
+      {orgSwitcherData.length > 0 && (
+        <OrgSwitcher
+          organizations={orgSwitcherData}
+          activeOrgId={activeOrgId ?? orgSwitcherData[0]?.id}
+        />
       )}
 
       <nav className="flex-1 space-y-0.5 p-3" aria-label="Dashboard">
@@ -158,20 +202,12 @@ export function DashboardShell({
 
   const topBarExtras = (
     <>
-      <Button
-        variant="outline"
-        size="sm"
-        className="hidden gap-2 text-muted-foreground lg:flex"
-        type="button"
-        aria-label="Search dashboard"
-      >
-        <Search className="h-4 w-4" />
-        <span className="text-xs">Search…</span>
-        <kbd className="pointer-events-none ml-2 hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium sm:inline">
-          ⌘K
-        </kbd>
-      </Button>
-      <DashboardNotifications items={DEMO_NOTIFICATIONS} />
+      <DashboardCommandMenu
+        items={commandItems}
+        isDemo={isDemo}
+        signOutAction={signOutAction}
+      />
+      <DashboardNotifications items={DEMO_NOTIFICATIONS} demoOnly={isDemo} />
       <ThemeToggle />
     </>
   )
@@ -186,7 +222,10 @@ export function DashboardShell({
         <header className="flex h-16 items-center justify-between gap-2 border-b border-border bg-card/50 px-4 backdrop-blur md:hidden">
           <BrandLogo size="sm" href={isDemo ? '/' : '/'} />
           <div className="flex items-center gap-1">
-            <DashboardNotifications items={DEMO_NOTIFICATIONS} />
+            <DashboardNotifications
+              items={DEMO_NOTIFICATIONS}
+              demoOnly={isDemo}
+            />
             <ThemeToggle />
             <Button
               variant="ghost"
@@ -216,7 +255,8 @@ export function DashboardShell({
               <p className="truncate text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">Live demo</span>
                 {' — '}
-                explore the full dashboard without signing in
+                edit mock data in{' '}
+                <code className="text-xs">src/lib/demo-data.ts</code>
               </p>
             ) : (
               <p className="truncate text-sm text-muted-foreground">
@@ -237,10 +277,12 @@ export function DashboardShell({
           <div className="flex shrink-0 items-center gap-2">{topBarExtras}</div>
         </div>
 
-        <main className="flex-1 overflow-auto bg-gradient-to-b from-muted/20 to-background">
+        <main className="flex-1 overflow-auto bg-gradient-to-b from-muted/20 to-background pb-20 md:pb-8">
           <div className="container max-w-6xl py-8">{children}</div>
         </main>
       </div>
+
+      <MobileBottomNav basePath={basePath} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { mockUser } from '@/test-utils'
 
 const mockRequireAuth = jest.fn()
@@ -7,6 +7,17 @@ const mockGetDbUserWithMemberships = jest.fn()
 jest.mock('@/lib/auth', () => ({
   requireAuth: () => mockRequireAuth(),
   getDbUserWithMemberships: () => mockGetDbUserWithMemberships(),
+  ADMIN_ROLES: ['ADMIN', 'SUPER_ADMIN'],
+}))
+
+jest.mock('@/lib/feature-flags', () => ({
+  isFeatureEnabled: () => false,
+}))
+
+jest.mock('@/lib/prisma', () => ({
+  prisma: {
+    apiKey: { findMany: jest.fn().mockResolvedValue([]) },
+  },
 }))
 
 jest.mock('@/components/settings/create-organization-form', () => ({
@@ -36,6 +47,7 @@ describe('SettingsPage', () => {
       screen.getByRole('heading', { name: /settings/i })
     ).toBeInTheDocument()
     expect(screen.getByDisplayValue('Jane Doe')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('tab', { name: /organization/i }))
     expect(
       screen.getByText(/not part of any organization/i)
     ).toBeInTheDocument()
@@ -69,6 +81,7 @@ describe('SettingsPage', () => {
     })
 
     render(await SettingsPage())
+    fireEvent.click(screen.getByRole('tab', { name: /organization/i }))
     expect(screen.getByText(/1 member/i)).toBeInTheDocument()
   })
 
@@ -88,6 +101,7 @@ describe('SettingsPage', () => {
     })
 
     render(await SettingsPage())
+    fireEvent.click(screen.getByRole('tab', { name: /organization/i }))
     expect(screen.getByText('Acme')).toBeInTheDocument()
     expect(screen.getByText(/2 members/i)).toBeInTheDocument()
     expect(screen.getByText('admin')).toBeInTheDocument()

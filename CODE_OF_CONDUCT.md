@@ -1,8 +1,12 @@
 # Contributor Covenant Code of Conduct
 
+<p align="center">
+  <img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/launchkit.svg" width="48" height="48" alt="Launch Kit" />
+</p>
+
 ## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in the LaunchKit community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.
+We as members, contributors, and leaders pledge to make participation in the Launch Kit community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
@@ -34,7 +38,7 @@ Maintainers have the right and responsibility to remove, edit, or reject comment
 
 This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public spaces. Examples of representing our community include using an official project email address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
 
-For LaunchKit, that includes:
+For Launch Kit, that includes:
 
 - GitHub issues, pull requests, and discussions
 - Code review comments

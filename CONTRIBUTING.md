@@ -1,6 +1,14 @@
-# Contributing to LaunchKit
+# Contributing to Launch Kit
 
-Thank you for considering a contribution to LaunchKit. Whether you fix a bug, improve docs, add a feature, or report an issue — it helps the whole community.
+<p align="center">
+  <a href="https://nextjs.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="36" alt="Next.js" /></a>
+  <a href="https://www.typescriptlang.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/typescript.svg" width="36" alt="TypeScript" /></a>
+  <a href="https://jestjs.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/jest.svg" width="36" alt="Jest" /></a>
+  <a href="https://playwright.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/playwright.svg" width="36" alt="Playwright" /></a>
+  <a href="https://github.com/features/actions"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/githubactions.svg" width="36" alt="GitHub Actions" /></a>
+</p>
+
+Thank you for considering a contribution to Launch Kit. Whether you fix a bug, improve docs, add a feature, or report an issue — it helps the whole community.
 
 ## Table of Contents
 
@@ -102,7 +110,7 @@ Use the `@/` import alias for everything under `src/`.
 
 ## Testing
 
-LaunchKit enforces **100% global coverage** (statements, branches, functions, lines) in `jest.config.ts`.
+Launch Kit enforces **100% global coverage** (statements, branches, functions, lines) in `jest.config.ts`.
 
 ```bash
 # Run all tests
@@ -173,4 +181,4 @@ test(dashboard): cover planName fallback in shell
 chore(deps): bump next to 15.0.3
 ```
 
-Thank you for helping make LaunchKit better.
+Thank you for helping make Launch Kit better.

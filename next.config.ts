@@ -1,11 +1,10 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode for catching bugs early
   reactStrictMode: true,
 
-  // Optimize images from these remote domains
   images: {
+    // Supabase storage + OAuth profile photos
     remotePatterns: [
       {
         protocol: 'https',
@@ -20,15 +19,13 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.cloudfront.net',
+      },
     ],
   },
 
-  // Redirect root to dashboard for logged-in users (handled by middleware)
-  // async redirects() {
-  //   return []
-  // },
-
-  // Security headers
   async headers() {
     return [
       {
@@ -53,8 +50,8 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://*.supabase.co https://api.stripe.com",
-              'frame-src https://js.stripe.com https://hooks.stripe.com',
+              "connect-src 'self' https://*.supabase.co https://api.stripe.com https://api.whop.com https://*.whop.com https://api.paypal.com https://www.paypal.com https://*.paypal.com https://*.ingest.sentry.io https://*.sentry.io",
+              'frame-src https://js.stripe.com https://hooks.stripe.com https://www.paypal.com https://*.paypal.com',
             ].join('; '),
           },
         ],
@@ -62,9 +59,7 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // Experimental features
   experimental: {
-    // Optimize bundle by only importing used parts of large packages
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
 }

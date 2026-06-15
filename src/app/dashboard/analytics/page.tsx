@@ -7,6 +7,8 @@ import {
   buildChartFromMemberships,
   getDashboardStats,
 } from '@/lib/dashboard-stats'
+import { BarChart3 } from 'lucide-react'
+import { EmptyState } from '@/components/dashboard/empty-state'
 import {
   Card,
   CardContent,
@@ -37,11 +39,13 @@ export default async function AnalyticsPage() {
       />
 
       {memberships.length === 0 ? (
-        <Card className="border-dashed">
-          <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            Create an organization to see analytics here.
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={BarChart3}
+          title="No analytics yet"
+          description="Create an organization to unlock workspace metrics and engagement charts."
+          actionLabel="Create organization"
+          actionHref="/dashboard/settings"
+        />
       ) : (
         <>
           <MetricsGrid metrics={metrics} />

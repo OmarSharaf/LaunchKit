@@ -140,4 +140,52 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Color presets — set NEXT_PUBLIC_THEME_PRESET or data-theme-preset on <html> */
+[data-theme-preset='ocean'] {
+  --primary: 199 89% 48%;
+  --ring: 199 89% 48%;
+  --chart-1: 199 89% 48%;
+}
+
+[data-theme-preset='violet'] {
+  --primary: 262 83% 58%;
+  --ring: 262 83% 58%;
+  --chart-1: 262 83% 58%;
+}
+
+[data-theme-preset='emerald'] {
+  --primary: 160 84% 39%;
+  --ring: 160 84% 39%;
+  --chart-1: 160 84% 39%;
+}
+
+.dark[data-theme-preset='ocean'] {
+  --primary: 199 89% 55%;
+  --ring: 199 89% 55%;
+}
+
+.dark[data-theme-preset='violet'] {
+  --primary: 263 70% 65%;
+  --ring: 263 70% 65%;
+}
+
+.dark[data-theme-preset='emerald'] {
+  --primary: 160 70% 45%;
+  --ring: 160 70% 45%;
 }

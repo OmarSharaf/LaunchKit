@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DashboardShell } from '@/components/dashboard/dashboard-shell'
 import { DemoBanner } from '@/components/demo/demo-banner'
+import { DemoCoachMarks } from '@/components/demo/demo-coach-marks'
 import { DEMO_ORG, DEMO_USER } from '@/lib/demo-data'
 import { APP_NAME } from '@/lib/site'
 
@@ -24,9 +25,14 @@ export default function DemoLayout({
         userEmail={DEMO_USER.email}
         orgName={DEMO_ORG.name}
         planName={DEMO_ORG.plan}
+        organizations={[
+          { id: 'demo-1', name: DEMO_ORG.name, planName: DEMO_ORG.plan },
+        ]}
+        activeOrgId="demo-1"
       >
         {children}
       </DashboardShell>
+      <DemoCoachMarks />
     </div>
   )
 }

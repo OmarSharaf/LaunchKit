@@ -20,11 +20,11 @@ describe('marketing content', () => {
 
   it('exports stats, logos, features, and steps', () => {
     expect(STATS).toHaveLength(4)
-    expect(STATS[0].value).toBe('12,000+')
+    expect(STATS[0].value).toBe('12k+')
     expect(LOGO_CLOUD).toContain('Stripe')
-    expect(FEATURES).toHaveLength(6)
-    expect(FEATURES[0].title).toBe('Real-time analytics')
-    expect(STEPS[0].title).toBe('Create your workspace')
+    expect(FEATURES).toHaveLength(7)
+    expect(FEATURES[0].title).toBe('Dashboard shell')
+    expect(STEPS[0].title).toBe('Clone & configure')
   })
 
   it('exports pricing plans with highlighted tier', () => {

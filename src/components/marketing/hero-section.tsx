@@ -1,21 +1,22 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Play, Sparkles } from 'lucide-react'
+import { ArrowRight, Check, Github, Play, Sparkles } from 'lucide-react'
 import { HeroVisual } from '@/components/marketing/hero-visual'
+import { MarketingThemePreview } from '@/components/marketing/marketing-theme-preview'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   APP_DESCRIPTION,
-  APP_NAME,
   APP_TAGLINE,
   DEMO_DASHBOARD_PATH,
+  GITHUB_REPO,
   PRODUCT_CATEGORY,
 } from '@/lib/site'
 
 const TRUST_ITEMS = [
-  '14-day free trial',
-  'No credit card',
-  'Cancel anytime',
-  'SOC 2 ready',
+  'Auth & billing included',
+  'Multi-tenant orgs',
+  '100% test coverage',
+  'Fork on GitHub',
 ]
 
 export function HeroSection() {
@@ -50,15 +51,25 @@ export function HeroSection() {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button size="lg" asChild>
-              <Link href="/auth/register">
-                Start free trial
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
               <Link href={DEMO_DASHBOARD_PATH}>
                 <Play className="h-4 w-4" />
                 View live demo
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link
+                href={GITHUB_REPO}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github className="h-4 w-4" />
+                Star on GitHub
+              </Link>
+            </Button>
+            <Button size="lg" variant="ghost" asChild>
+              <Link href="/auth/register">
+                Start free trial
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -71,13 +82,20 @@ export function HeroSection() {
               </li>
             ))}
           </ul>
+
+          <MarketingThemePreview />
         </div>
 
         <HeroVisual />
 
         <p className="mx-auto mt-8 max-w-lg text-center text-xs text-muted-foreground">
-          Trusted by teams who run on {APP_NAME}. Explore the product before you
-          commit.
+          Open-source MIT boilerplate — customize branding in{' '}
+          <Link
+            href={GITHUB_REPO + '/blob/main/docs/CUSTOMIZATION.md'}
+            className="text-primary hover:underline"
+          >
+            docs/CUSTOMIZATION.md
+          </Link>
         </p>
       </div>
     </section>

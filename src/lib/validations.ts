@@ -1,9 +1,6 @@
 import { z } from 'zod'
 
-/**
- * Zod schemas shared between forms and (eventually) API routes.
- * Keeping messages here means we don't duplicate copy in every input.
- */
+// one place for form + API validation messages
 
 export const signUpSchema = z
   .object({
@@ -44,10 +41,6 @@ export const resetPasswordSchema = z
     path: ['confirmPassword'],
   })
 
-// ─────────────────────────────────────────────
-// ORGANIZATION
-// ─────────────────────────────────────────────
-
 export const createOrganizationSchema = z.object({
   name: z
     .string()
@@ -72,18 +65,10 @@ export const updateOrganizationSchema = z.object({
   logoUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
 })
 
-// ─────────────────────────────────────────────
-// INVITATIONS
-// ─────────────────────────────────────────────
-
 export const inviteMemberSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   role: z.enum(['ADMIN', 'MEMBER']),
 })
-
-// ─────────────────────────────────────────────
-// PROFILE
-// ─────────────────────────────────────────────
 
 export const updateProfileSchema = z.object({
   name: z
@@ -94,9 +79,26 @@ export const updateProfileSchema = z.object({
   avatarUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
 })
 
-// ─────────────────────────────────────────────
-// TYPE EXPORTS
-// ─────────────────────────────────────────────
+export const adminUpdateUserSchema = z.object({
+  status: z.enum(['ACTIVE', 'SUSPENDED', 'BANNED']).optional(),
+  suspendedReason: z.string().max(500).optional().nullable(),
+  isPlatformAdmin: z.boolean().optional(),
+})
+
+export const adminUpdateSettingsSchema = z.object({
+  signupsEnabled: z.boolean(),
+})
+
+export const adminListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  search: z.string().max(100).optional(),
+})
+
+export const adminUsersQuerySchema = adminListQuerySchema.extend({
+  status: z.enum(['ACTIVE', 'SUSPENDED', 'BANNED']).optional(),
+  recentDays: z.coerce.number().int().min(1).max(90).optional(),
+})
 
 export type SignUpInput = z.infer<typeof signUpSchema>
 export type SignInInput = z.infer<typeof signInSchema>
@@ -106,3 +108,5 @@ export type CreateOrganizationInput = z.infer<typeof createOrganizationSchema>
 export type UpdateOrganizationInput = z.infer<typeof updateOrganizationSchema>
 export type InviteMemberInput = z.infer<typeof inviteMemberSchema>
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>
+export type AdminUpdateUserInput = z.infer<typeof adminUpdateUserSchema>
+export type AdminUpdateSettingsInput = z.infer<typeof adminUpdateSettingsSchema>

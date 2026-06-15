@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { requireAuthApi, requireOrgAdmin } from '@/lib/auth'
+import { requireAuthApi, requireOrgRole } from '@/lib/auth'
 import { inviteMemberSchema } from '@/lib/validations'
 import { sendInvitationEmail } from '@/lib/email'
 import { APP_URL } from '@/lib/site'
-import { AuthError } from '@/lib/errors'
+import { AuthError, ForbiddenError } from '@/lib/errors'
 import { createAuditLog } from '@/lib/audit'
 import { logger } from '@/lib/logger'
 
@@ -21,13 +21,7 @@ export async function POST(
     const body = await request.json()
     const input = inviteMemberSchema.parse(body)
 
-    const membership = await requireOrgAdmin(organizationId, user.id)
-    if (!membership) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Admin access required' },
-        { status: 403 }
-      )
-    }
+    const membership = await requireOrgRole(organizationId, user.id)
 
     const existingMember = await prisma.organizationMember.findFirst({
       where: {
@@ -79,6 +73,9 @@ export async function POST(
   } catch (err) {
     if (err instanceof AuthError) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (err instanceof ForbiddenError) {
+      return NextResponse.json({ error: err.message }, { status: 403 })
     }
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: err.errors }, { status: 400 })

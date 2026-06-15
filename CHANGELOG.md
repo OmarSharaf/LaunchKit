@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to [LaunchKit](https://github.com/OmarSharaf/launchkit) are documented in this file.
+<p align="center">
+  <a href="https://stripe.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/stripe.svg" width="40" alt="Stripe" /></a>
+  <a href="https://whop.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/whop.svg" width="40" alt="Whop" /></a>
+  <a href="https://www.paypal.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/paypal.svg" width="40" alt="PayPal" /></a>
+  <a href="https://nextjs.org"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/nextdotjs.svg" width="40" alt="Next.js" /></a>
+  <a href="https://supabase.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="docs/assets/logos/supabase.svg" width="40" alt="Supabase" /></a>
+</p>
+
+All notable changes to [Launch Kit](https://github.com/OmarSharaf/launchkit) are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -8,6 +16,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- **Whop payment gateway** — optional alternative to Stripe; hosted checkout, webhooks, billing portal (`src/lib/whop.ts`, `/api/whop/*`, `/api/webhooks/whop`)
+- **PayPal payment gateway** — optional alternative via Subscriptions REST API; checkout, webhooks, autopay portal (`src/lib/paypal.ts`, `/api/paypal/*`, `/api/webhooks/paypal`)
+- **Multi-provider billing UI** — payment method picker on `/dashboard/billing` (Stripe / Whop / PayPal)
+- **`PaymentProvider` enum** — `STRIPE`, `WHOP`, `PAYPAL` on subscriptions
+- **Database migrations** — `20250615143000_whop_payment`, `20250615150000_paypal_payment`
+- **Webhook idempotency** — `whop_webhook_events`, `paypal_webhook_events` tables
+- **Billing documentation** — [`docs/BILLING.md`](./docs/BILLING.md)
 - **Build provenance attestations** in CI and Release workflows via [`actions/attest-build-provenance@v3`](https://github.com/actions/attest-build-provenance)
 - **Live demo dashboard** at `/demo` — public preview of the full dashboard UI (overview, billing, settings) with mock data; no authentication required
 - **Demo components:** activity chart, activity feed, metrics grid, preview banner
@@ -28,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Documentation
 
 - README, CONTRIBUTING, SECURITY, and CODE_OF_CONDUCT updated to reflect current architecture and routes
+- Added [`docs/BILLING.md`](./docs/BILLING.md) — multi-gateway billing setup (Stripe, Whop, PayPal)
 
 ---
 

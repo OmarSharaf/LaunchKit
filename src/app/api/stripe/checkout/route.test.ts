@@ -6,21 +6,24 @@ import { mockUser } from '@/test-utils'
 import { ZodError } from 'zod'
 
 const mockRequireAuth = jest.fn()
-const mockFindFirst = jest.fn()
+const mockRequireOrgRole = jest.fn()
 const mockFindUnique = jest.fn()
 const mockOrgUpdate = jest.fn()
 const mockGetOrCreateStripeCustomer = jest.fn()
 const mockCreateCheckoutSession = jest.fn()
+const mockCreateAuditLog = jest.fn()
 
 jest.mock('@/lib/auth', () => ({
   requireAuthApi: () => mockRequireAuth(),
+  requireOrgRole: (...args: unknown[]) => mockRequireOrgRole(...args),
+}))
+
+jest.mock('@/lib/audit', () => ({
+  createAuditLog: (...args: unknown[]) => mockCreateAuditLog(...args),
 }))
 
 jest.mock('@/lib/prisma', () => ({
   prisma: {
-    organizationMember: {
-      findFirst: (...args: unknown[]) => mockFindFirst(...args),
-    },
     user: { findUnique: (...args: unknown[]) => mockFindUnique(...args) },
     organization: { update: (...args: unknown[]) => mockOrgUpdate(...args) },
   },
@@ -47,13 +50,14 @@ describe('POST /api/stripe/checkout', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockRequireAuth.mockResolvedValue(mockUser)
-    mockFindFirst.mockResolvedValue(membership)
+    mockRequireOrgRole.mockResolvedValue(membership)
     mockFindUnique.mockResolvedValue({ email: 'db@example.com' })
     mockGetOrCreateStripeCustomer.mockResolvedValue({ id: 'cus_new' })
     mockCreateCheckoutSession.mockResolvedValue({
       url: 'https://checkout.stripe.com',
     })
     mockOrgUpdate.mockResolvedValue({})
+    mockCreateAuditLog.mockResolvedValue({})
   })
 
   it('creates checkout session for admin', async () => {
@@ -74,7 +78,7 @@ describe('POST /api/stripe/checkout', () => {
   })
 
   it('skips org update when customer already exists', async () => {
-    mockFindFirst.mockResolvedValue({
+    mockRequireOrgRole.mockResolvedValue({
       organization: {
         ...membership.organization,
         stripeCustomerId: 'cus_existing',
@@ -107,7 +111,8 @@ describe('POST /api/stripe/checkout', () => {
   })
 
   it('returns 403 when user is not admin', async () => {
-    mockFindFirst.mockResolvedValue(null)
+    const { ForbiddenError } = await import('@/lib/errors')
+    mockRequireOrgRole.mockRejectedValue(new ForbiddenError())
 
     const request = new NextRequest('http://localhost/api/stripe/checkout', {
       method: 'POST',

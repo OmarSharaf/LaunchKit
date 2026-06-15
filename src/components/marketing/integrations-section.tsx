@@ -1,11 +1,12 @@
 import { Globe, Plug, Webhook, Zap } from 'lucide-react'
 import { SectionHeading } from '@/components/marketing/section-heading'
+import { INTEGRATIONS_SECTION } from '@/lib/marketing'
 
 const INTEGRATIONS = [
-  { icon: Plug, name: 'Slack', color: 'text-[#4A154B]' },
-  { icon: Zap, name: 'Stripe', color: 'text-[#635BFF]' },
-  { icon: Globe, name: 'Google', color: 'text-[#4285F4]' },
-  { icon: Webhook, name: 'Webhooks', color: 'text-primary' },
+  { icon: Plug, name: 'Stripe', color: 'text-[#635BFF]' },
+  { icon: Zap, name: 'PayPal', color: 'text-[#003087]' },
+  { icon: Globe, name: 'Supabase', color: 'text-[#3ECF8E]' },
+  { icon: Webhook, name: 'Whop', color: 'text-primary' },
 ]
 
 export function IntegrationsSection() {
@@ -13,9 +14,9 @@ export function IntegrationsSection() {
     <section className="border-b border-border bg-muted/20 py-20 md:py-24">
       <div className="container">
         <SectionHeading
-          eyebrow="Integrations"
-          title="Connects with the tools you already use"
-          description="Sync data in real time and trigger workflows from your existing stack."
+          eyebrow={INTEGRATIONS_SECTION.eyebrow}
+          title={INTEGRATIONS_SECTION.title}
+          description={INTEGRATIONS_SECTION.description}
         />
         <div className="mx-auto grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
           {INTEGRATIONS.map(({ icon: Icon, name, color }) => (
@@ -31,16 +32,14 @@ export function IntegrationsSection() {
           ))}
         </div>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          {['Notion', 'HubSpot', 'Linear', 'GitHub', 'Zapier', 'Figma'].map(
-            (tool) => (
-              <span
-                key={tool}
-                className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-medium text-muted-foreground"
-              >
-                {tool}
-              </span>
-            )
-          )}
+          {INTEGRATIONS_SECTION.extraTools.map((tool) => (
+            <span
+              key={tool}
+              className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-medium text-muted-foreground"
+            >
+              {tool}
+            </span>
+          ))}
         </div>
       </div>
     </section>

@@ -14,15 +14,15 @@ describe('MarketingHeader', () => {
     expect(
       screen.getAllByRole('link', { name: /live demo/i })[0]
     ).toHaveAttribute('href', '/demo')
-    expect(
-      screen.getByRole('link', { name: /start free trial/i })
-    ).toHaveAttribute('href', '/auth/register')
+    expect(screen.getByRole('link', { name: /get started/i })).toHaveAttribute(
+      'href',
+      '/auth/register'
+    )
   })
 
   it('toggles mobile navigation and closes via nav actions', () => {
     render(<MarketingHeader />)
     fireEvent.click(screen.getByLabelText(/open menu/i))
-    expect(screen.getByLabelText(/close menu/i)).toBeInTheDocument()
 
     const [, mobileNav] = screen.getAllByRole('navigation')
     const mobile = within(mobileNav)
@@ -39,11 +39,9 @@ describe('MarketingHeader', () => {
     fireEvent.click(mobile.getByRole('link', { name: /^faq$/i }))
     fireEvent.click(screen.getByLabelText(/open menu/i))
 
-    fireEvent.click(mobile.getByRole('link', { name: /view live demo/i }))
+    fireEvent.click(mobile.getByRole('link', { name: /live demo/i }))
     fireEvent.click(screen.getByLabelText(/open menu/i))
 
-    fireEvent.click(mobile.getByRole('link', { name: /^sign in$/i }))
     fireEvent.click(screen.getByLabelText(/open menu/i))
-    fireEvent.click(screen.getByLabelText(/close menu/i))
   })
 })

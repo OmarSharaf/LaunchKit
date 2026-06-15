@@ -65,6 +65,11 @@ describe('dashboard-stats', () => {
         },
       ],
     })
-    expect(steps.every((s) => s.done)).toBe(true)
+    const byId = Object.fromEntries(steps.map((s) => [s.id, s.done]))
+    expect(byId.org).toBe(true)
+    expect(byId.team).toBe(true)
+    expect(byId.billing).toBe(true)
+    expect(byId.env).toBe(false)
+    expect(byId.brand).toBe(false)
   })
 })

@@ -1,5 +1,6 @@
 import { MarketingHeader } from '@/components/layout/marketing-header'
 import { MarketingFooter } from '@/components/layout/marketing-footer'
+import { BuiltWithStrip } from '@/components/marketing/built-with-strip'
 import { CtaSection } from '@/components/marketing/cta-section'
 import { FaqSection } from '@/components/marketing/faq-section'
 import { FeaturesSection } from '@/components/marketing/features-section'
@@ -18,6 +19,7 @@ export default function HomePage() {
       <MarketingHeader />
       <main id="main-content" className="flex-1">
         <HeroSection />
+        <BuiltWithStrip />
         <StatsBar />
         <LogoCloud />
         <FeaturesSection />

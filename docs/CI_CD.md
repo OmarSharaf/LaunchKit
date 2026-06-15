@@ -1,6 +1,14 @@
 # CI/CD Guide
 
-LaunchKit uses **GitHub Actions** to validate every change on `main`, `master`, and `develop`. **Vercel** (or any Node host) is optional and used when you deploy your own fork to production.
+<p align="center">
+  <a href="https://github.com/features/actions"><img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/githubactions.svg" width="44" alt="GitHub Actions" /></a>
+  <a href="https://vercel.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/vercel.svg" width="44" alt="Vercel" /></a>
+  <a href="https://www.docker.com"><img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/docker.svg" width="44" alt="Docker" /></a>
+  <a href="https://jestjs.io"><img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/jest.svg" width="44" alt="Jest" /></a>
+  <a href="https://playwright.dev"><img style="background:#fff;border-radius:8px;padding:6px"  src="../assets/logos/playwright.svg" width="44" alt="Playwright" /></a>
+</p>
+
+Launch Kit uses **GitHub Actions** to validate every change on `main`, `master`, and `develop`. **Vercel** (or any Node host) is optional and used when you deploy your own fork to production.
 
 ## Quick reference
 
@@ -136,11 +144,11 @@ This does not replace `npm run ci` before pushing — always run `npm run ci` or
 
 ## Troubleshooting
 
-| Problem                                  | Fix                                                             |
-| ---------------------------------------- | --------------------------------------------------------------- |
-| Build fails locally without `.env.local` | Run `npm run ci:env` or copy `.env.example`                     |
-| Tests fail coverage locally              | Run `npm run test:coverage` and add/update `*.test.tsx` files   |
-| Prisma client missing                    | `npm run db:generate`                                           |
-| Webhook errors in dev                    | `stripe listen --forward-to localhost:3000/api/webhooks/stripe` |
+| Problem                                  | Fix                                                                                                                                                   |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build fails locally without `.env.local` | Run `npm run ci:env` or copy `.env.example`                                                                                                           |
+| Tests fail coverage locally              | Run `npm run test:coverage` and add/update `*.test.tsx` files                                                                                         |
+| Prisma client missing                    | `npm run db:generate`                                                                                                                                 |
+| Webhook errors in dev                    | Stripe: `stripe listen --forward-to localhost:3000/api/webhooks/stripe`. Whop/PayPal: use ngrok or Cloudflare Tunnel — see [BILLING.md](./BILLING.md) |
 
 For security-related deployment guidance, see [SECURITY.md](../SECURITY.md).

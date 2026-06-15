@@ -15,9 +15,13 @@ interface NotificationItem {
 
 interface DashboardNotificationsProps {
   items: NotificationItem[]
+  demoOnly?: boolean
 }
 
-export function DashboardNotifications({ items }: DashboardNotificationsProps) {
+export function DashboardNotifications({
+  items,
+  demoOnly = false,
+}: DashboardNotificationsProps) {
   const [open, setOpen] = useState(false)
   const unread = items.filter((i) => !i.read).length
 
@@ -28,6 +32,7 @@ export function DashboardNotifications({ items }: DashboardNotificationsProps) {
         size="icon"
         aria-label="Notifications"
         aria-expanded={open}
+        title={demoOnly ? 'Demo only — sample notifications' : undefined}
         onClick={() => setOpen(!open)}
         className="relative"
       >

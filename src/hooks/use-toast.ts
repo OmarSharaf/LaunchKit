@@ -109,7 +109,7 @@ function useToast() {
   }
 }
 
-/** Clears all toasts — used by tests and Storybook-style resets */
+// used in tests to reset toast state
 export function dismissAllToasts() {
   dispatch({ type: 'REMOVE_TOAST' })
 }

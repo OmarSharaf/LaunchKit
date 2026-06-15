@@ -5,6 +5,7 @@ import { DeveloperCredit } from '@/components/layout/developer-credit'
 import { SkipLink } from '@/components/layout/skip-link'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
+import { DEFAULT_THEME_PRESET } from '@/lib/theme-presets'
 import {
   APP_DESCRIPTION,
   APP_NAME,
@@ -22,12 +23,12 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   keywords: [
-    'business operations',
-    'team collaboration',
-    'workflow automation',
-    'analytics dashboard',
-    'subscription billing',
-    'multi-tenant platform',
+    'saas boilerplate',
+    'nextjs starter',
+    'supabase auth',
+    'stripe billing',
+    'open source',
+    'multi-tenant',
   ],
   authors: [{ name: DEVELOPER_NAME, url: 'https://www.omarsharaf.me' }],
   creator: DEVELOPER_NAME,
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable}`}
+      data-theme-preset={DEFAULT_THEME_PRESET}
       suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col bg-background font-sans antialiased">

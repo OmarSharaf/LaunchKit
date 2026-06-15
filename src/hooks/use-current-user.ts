@@ -4,10 +4,6 @@ import { useEffect, useState } from 'react'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
-/**
- * Returns the current Supabase user on the client side.
- * Subscribe to auth state changes automatically.
- */
 export function useCurrentUser() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)

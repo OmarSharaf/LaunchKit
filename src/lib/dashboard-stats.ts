@@ -3,6 +3,7 @@ import type {
   DashboardChartPoint,
   DashboardMetric,
 } from '@/lib/dashboard-types'
+import { DOCS_URL } from '@/lib/site'
 import { formatRelativeDate, isSubscriptionActive } from '@/lib/utils'
 
 type Membership = {
@@ -158,6 +159,12 @@ export function getOnboardingSteps(dbUser: DbUser | null) {
 
   return [
     {
+      id: 'env',
+      label: 'Configure .env.local (Supabase + database)',
+      done: false,
+      href: DOCS_URL,
+    },
+    {
       id: 'org',
       label: 'Create an organization',
       done: hasOrg,
@@ -171,15 +178,15 @@ export function getOnboardingSteps(dbUser: DbUser | null) {
     },
     {
       id: 'billing',
-      label: 'Choose a subscription plan',
+      label: 'Connect a payment provider',
       done: hasPaid,
       href: '/dashboard/billing',
     },
     {
-      id: 'analytics',
-      label: 'Explore analytics',
-      done: hasOrg,
-      href: '/dashboard/analytics',
+      id: 'brand',
+      label: 'Customize branding & marketing copy',
+      done: false,
+      href: '/design-system',
     },
   ]
 }

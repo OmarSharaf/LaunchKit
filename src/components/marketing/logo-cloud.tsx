@@ -1,12 +1,11 @@
-import { LOGO_CLOUD } from '@/lib/marketing'
-import { APP_NAME } from '@/lib/site'
+import { LOGO_CLOUD, LOGO_CLOUD_TAGLINE } from '@/lib/marketing'
 
 export function LogoCloud() {
   return (
     <section className="border-b border-border/60 py-14">
       <div className="container">
         <p className="mb-10 text-center text-sm font-medium text-muted-foreground">
-          Teams at innovative companies run on {APP_NAME}
+          {LOGO_CLOUD_TAGLINE}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
           {LOGO_CLOUD.map((name) => (

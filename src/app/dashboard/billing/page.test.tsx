@@ -16,6 +16,14 @@ jest.mock('@/lib/prisma', () => ({
   },
 }))
 
+jest.mock('@/lib/whop', () => ({
+  isWhopEnabled: () => false,
+}))
+
+jest.mock('@/lib/paypal', () => ({
+  isPayPalEnabled: () => false,
+}))
+
 jest.mock('@/components/billing/billing-actions', () => ({
   BillingActions: () => <div data-testid="billing-actions" />,
 }))
@@ -33,16 +41,16 @@ describe('BillingPage', () => {
     mockPlanFindMany.mockResolvedValue([])
   })
 
-  it('renders free plan when no organization', async () => {
+  it('renders empty state when no organization', async () => {
     mockGetDbUserWithMemberships.mockResolvedValue({ memberships: [] })
     render(await BillingPage({ searchParams: Promise.resolve({}) }))
     expect(
       screen.getByRole('heading', { name: /billing/i })
     ).toBeInTheDocument()
-    expect(screen.getByText('Free')).toBeInTheDocument()
+    expect(screen.getByText(/no organization/i)).toBeInTheDocument()
     expect(
-      screen.getByText(/create an organization in settings first/i)
-    ).toBeInTheDocument()
+      screen.getByRole('link', { name: /go to settings/i })
+    ).toHaveAttribute('href', '/dashboard/settings')
   })
 
   it('renders active subscription with cancel notice', async () => {

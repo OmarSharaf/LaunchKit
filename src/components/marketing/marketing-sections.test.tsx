@@ -17,38 +17,38 @@ describe('marketing sections', () => {
     render(<HeroSection />)
     expect(
       screen.getByRole('heading', {
-        name: /the smarter way to run, grow, and scale your business/i,
+        name: /ship your saas in days, not months/i,
       })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: /start free trial/i })
     ).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: /view live demo/i })
     ).toHaveAttribute('href', '/demo')
+    expect(
+      screen.getByRole('link', { name: /star on github/i })
+    ).toBeInTheDocument()
   })
 
   it('renders StatsBar, LogoCloud, and IntegrationsSection', () => {
     render(<StatsBar />)
-    expect(screen.getByText('12,000+')).toBeInTheDocument()
+    expect(screen.getByText('12k+')).toBeInTheDocument()
 
     render(<LogoCloud />)
     expect(screen.getByText('Stripe')).toBeInTheDocument()
 
     render(<IntegrationsSection />)
-    expect(screen.getAllByText('Slack').length).toBeGreaterThan(0)
-    expect(screen.getByText('Zapier')).toBeInTheDocument()
+    expect(screen.getAllByText('Stripe').length).toBeGreaterThan(0)
+    expect(screen.getByText('GitHub')).toBeInTheDocument()
   })
 
   it('renders features, showcase, and how-it-works', () => {
     render(<FeaturesSection />)
-    expect(screen.getByText('Real-time analytics')).toBeInTheDocument()
+    expect(screen.getByText('Dashboard shell')).toBeInTheDocument()
 
     render(<ProductShowcase />)
     expect(screen.getByText('Unified dashboard')).toBeInTheDocument()
 
     render(<HowItWorksSection />)
-    expect(screen.getByText('Create your workspace')).toBeInTheDocument()
+    expect(screen.getByText('Clone & configure')).toBeInTheDocument()
   })
 
   it('renders pricing, testimonials, and CTA', () => {
@@ -59,7 +59,7 @@ describe('marketing sections', () => {
     expect(screen.getByText(/alex chen/i)).toBeInTheDocument()
 
     render(<CtaSection />)
-    expect(screen.getByText(/ready to transform/i)).toBeInTheDocument()
+    expect(screen.getByText(/ready to fork and ship/i)).toBeInTheDocument()
   })
 
   it('renders SectionHeading alignments', () => {
@@ -71,25 +71,21 @@ describe('marketing sections', () => {
 
   it('toggles FAQ items', () => {
     render(<FaqSection />)
-    expect(
-      screen.getByText(/every plan includes a 14-day free trial/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/MIT-licensed/i)).toBeInTheDocument()
 
-    const trialButton = screen.getByRole('button', {
-      name: /is there a free trial/i,
+    const licenseButton = screen.getByRole('button', {
+      name: /is this really free/i,
     })
-    fireEvent.click(trialButton)
-    expect(
-      screen.getByText(/every plan includes a 14-day free trial/i)
-    ).not.toBeVisible()
+    fireEvent.click(licenseButton)
+    expect(screen.getByText(/MIT-licensed/i)).not.toBeVisible()
 
-    fireEvent.click(trialButton)
-    expect(
-      screen.getByText(/every plan includes a 14-day free trial/i)
-    ).toBeVisible()
+    fireEvent.click(licenseButton)
+    expect(screen.getByText(/MIT-licensed/i)).toBeVisible()
 
     fireEvent.click(
-      screen.getByRole('button', { name: /can i change plans later/i })
+      screen.getByRole('button', {
+        name: /can i use this for client projects/i,
+      })
     )
   })
 })

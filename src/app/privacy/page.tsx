@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BrandLogo } from '@/components/brand/brand-logo'
-import { APP_NAME } from '@/lib/site'
+import { APP_NAME, SUPPORT_EMAIL } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -30,24 +30,68 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold">Information we collect</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              We collect account information you provide (such as name and
-              email), usage data, and payment information processed by Stripe.
-              Authentication is handled via Supabase.
+              We collect account information you provide (name, email,
+              organization details), usage data about how you use {APP_NAME},
+              and payment information processed by{' '}
+              <a
+                href="https://stripe.com/privacy"
+                className="text-primary hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Stripe
+              </a>
+              . Authentication is handled via{' '}
+              <a
+                href="https://supabase.com/privacy"
+                className="text-primary hover:underline"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Supabase Auth
+              </a>
+              . Transactional emails may be sent through Resend.
             </p>
           </section>
           <section>
             <h2 className="text-xl font-semibold">How we use data</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               Data is used to provide and improve {APP_NAME}, process
-              transactions, send transactional emails, and comply with legal
-              obligations. Replace this section with your actual practices.
+              subscriptions, send order notifications and team invitations,
+              maintain audit logs for security, and comply with legal
+              obligations. We do not sell your personal data.
             </p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold">Data retention</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Account data is retained while your account is active. Audit logs
+              and billing records may be kept for up to seven years for
+              compliance. You may request deletion of your account by contacting{' '}
+              <a
+                href={`mailto:${SUPPORT_EMAIL}`}
+                className="text-primary hover:underline"
+              >
+                {SUPPORT_EMAIL}
+              </a>
+              .
+            </p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold">Third-party processors</h2>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted-foreground">
+              <li>Supabase — authentication and database hosting</li>
+              <li>Stripe — payment processing and subscription management</li>
+              <li>Resend — transactional email delivery</li>
+              <li>Vercel (or your host) — application hosting</li>
+            </ul>
           </section>
           <section>
             <h2 className="text-xl font-semibold">Your rights</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Depending on your region, you may request access, correction, or
-              deletion of your personal data by contacting support.
+              Depending on your region (including GDPR and CCPA), you may
+              request access, correction, portability, or deletion of your
+              personal data. Contact {SUPPORT_EMAIL} to exercise these rights.
             </p>
           </section>
         </div>

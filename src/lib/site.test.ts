@@ -11,7 +11,7 @@ describe('site constants', () => {
     delete process.env.NEXT_PUBLIC_APP_URL
 
     const site = await import('./site')
-    expect(site.APP_NAME).toBe('LaunchKit')
+    expect(site.APP_NAME).toBe('Launch Kit')
     expect(site.APP_URL).toBe('https://launchkit.dev')
     expect(site.DEVELOPER_NAME).toBe('Omar S. M. Abdelfatah')
     expect(site.DEMO_DASHBOARD_PATH).toBe('/demo')

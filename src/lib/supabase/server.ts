@@ -2,7 +2,6 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
-/** Server-side Supabase — session lives in HTTP-only cookies */
 export async function createClient() {
   const cookieStore = await cookies()
 
@@ -26,7 +25,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             )
           } catch {
-            // Server Components can't always write cookies — middleware refreshes the session instead
+            // RSC can't always write cookies — middleware refreshes on the next request
           }
         },
       },
@@ -34,10 +33,7 @@ export async function createClient() {
   )
 }
 
-/**
- * Creates a Supabase admin client using the service role key.
- * Use ONLY on the server — NEVER expose the service role key to the browser.
- */
+// service role: admin deletes, bypasses RLS — keep on the server
 export function createAdminClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

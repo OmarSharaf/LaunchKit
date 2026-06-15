@@ -11,6 +11,18 @@ jest.mock('@/components/layout/theme-toggle', () => ({
   ThemeToggle: () => <button type="button">Theme</button>,
 }))
 
+jest.mock('@/components/dashboard/org-switcher', () => ({
+  OrgSwitcher: () => null,
+}))
+
+jest.mock('@/components/dashboard/dashboard-command-menu', () => ({
+  DashboardCommandMenu: () => null,
+}))
+
+jest.mock('@/components/dashboard/mobile-bottom-nav', () => ({
+  MobileBottomNav: () => null,
+}))
+
 describe('DashboardShell', () => {
   const signOutAction = jest.fn()
 
@@ -100,12 +112,14 @@ describe('DashboardShell', () => {
         userName="User"
         userEmail="u@example.com"
         orgName="Acme"
+        organizations={[{ id: '1', name: 'Acme', planName: undefined }]}
+        activeOrgId="1"
         signOutAction={signOutAction}
       >
         <div>Content</div>
       </DashboardShell>
     )
-    expect(screen.getByText('Free plan')).toBeInTheDocument()
+    expect(screen.getByText('Acme')).toBeInTheDocument()
   })
 
   it('highlights billing route and toggles mobile menu', () => {

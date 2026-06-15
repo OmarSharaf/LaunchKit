@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card'
 import { SectionHeading } from '@/components/marketing/section-heading'
 import { PLANS } from '@/lib/marketing'
+import { CUSTOMIZE_HINT, PLAN_COMPARISON } from '@/lib/marketing-content'
 import { cn } from '@/lib/utils'
 
 export function PricingSection() {
@@ -23,9 +24,12 @@ export function PricingSection() {
       <div className="container">
         <SectionHeading
           eyebrow="Pricing"
-          title="Simple, transparent pricing"
-          description="Start with a 14-day free trial on every plan. Upgrade when you are ready — no hidden fees."
+          title="Example pricing tiers"
+          description="Placeholder plans for your marketing page — edit PLANS in src/lib/marketing.ts. Billing is wired to Stripe, PayPal, and Whop."
         />
+        <p className="mx-auto -mt-8 mb-10 max-w-xl text-center text-xs text-muted-foreground">
+          {CUSTOMIZE_HINT}
+        </p>
 
         <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-3">
           {PLANS.map((plan) => (
@@ -84,6 +88,34 @@ export function PricingSection() {
               </CardFooter>
             </Card>
           ))}
+        </div>
+
+        <div className="mx-auto mt-16 max-w-4xl overflow-x-auto rounded-xl border border-border">
+          <table className="w-full min-w-[32rem] text-left text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/50">
+                <th className="px-4 py-3 font-medium">Feature</th>
+                <th className="px-4 py-3 font-medium">Starter</th>
+                <th className="px-4 py-3 font-medium">Pro</th>
+                <th className="px-4 py-3 font-medium">Enterprise</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PLAN_COMPARISON.features.map((row) => (
+                <tr
+                  key={row.name}
+                  className="border-b border-border last:border-0"
+                >
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {row.name}
+                  </td>
+                  <td className="px-4 py-3">{row.starter}</td>
+                  <td className="px-4 py-3 font-medium">{row.pro}</td>
+                  <td className="px-4 py-3">{row.enterprise}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>

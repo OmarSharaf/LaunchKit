@@ -4,6 +4,11 @@ import { prisma } from '@/lib/prisma'
 import { getSafeRedirectPath } from '@/lib/safe-redirect'
 import { ensureDefaultOrganization } from '@/lib/organizations'
 import { logger } from '@/lib/logger'
+import { areSignupsEnabled } from '@/lib/platform-settings'
+import {
+  assertUserCanAccessApp,
+  syncPlatformAdminFlag,
+} from '@/lib/platform-admin'
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
@@ -37,6 +42,22 @@ export async function GET(request: NextRequest) {
         data.user.user_metadata?.name ??
         null
 
+      const existingUser = await prisma.user.findUnique({
+        where: { id: data.user.id },
+        select: { id: true },
+      })
+
+      if (!existingUser) {
+        const signupsEnabled = await areSignupsEnabled()
+        if (!signupsEnabled) {
+          // admin closed signups — bounce them before we create a Prisma row
+          await supabase.auth.signOut()
+          return NextResponse.redirect(
+            `${origin}/auth/login?message=${encodeURIComponent('New signups are currently disabled.')}`
+          )
+        }
+      }
+
       await prisma.user.upsert({
         where: { id: data.user.id },
         create: {
@@ -54,12 +75,28 @@ export async function GET(request: NextRequest) {
         },
       })
 
+      await syncPlatformAdminFlag(data.user.id, data.user.email!)
+
+      try {
+        await assertUserCanAccessApp(data.user.id)
+      } catch (accessErr) {
+        await supabase.auth.signOut()
+        const message =
+          accessErr instanceof Error
+            ? accessErr.message
+            : 'Account access denied.'
+        return NextResponse.redirect(
+          `${origin}/auth/login?error=${encodeURIComponent(message)}`
+        )
+      }
+
       await ensureDefaultOrganization(data.user.id, displayName)
     }
 
     const forwardedHost = request.headers.get('x-forwarded-host')
     const isLocalEnv = process.env.NODE_ENV === 'development'
 
+    // Vercel/proxy: respect x-forwarded-host in prod
     if (isLocalEnv) {
       return NextResponse.redirect(`${origin}${next}`)
     }

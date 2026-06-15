@@ -4,6 +4,8 @@ import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-heade
 import { TeamMemberList } from '@/components/dashboard/team-member-list'
 import type { DashboardTeamMember } from '@/lib/dashboard-types'
 import { getDbUserWithMemberships, requireAuth } from '@/lib/auth'
+import { Users } from 'lucide-react'
+import { EmptyState } from '@/components/dashboard/empty-state'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -47,16 +49,13 @@ export default async function TeamPage() {
       />
 
       {!org ? (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
-            <p className="text-sm text-muted-foreground">
-              You need an organization before inviting teammates.
-            </p>
-            <Button asChild>
-              <Link href="/dashboard/settings">Go to settings</Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={Users}
+          title="No team yet"
+          description="Create an organization first, then invite colleagues from Settings."
+          actionLabel="Go to settings"
+          actionHref="/dashboard/settings"
+        />
       ) : (
         <>
           <Card>

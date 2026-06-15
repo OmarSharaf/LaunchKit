@@ -23,6 +23,7 @@ export async function sendInvitationEmail({
 }) {
   const client = getClient()
   if (!client) {
+    // local dev without Resend — invite still works, link is in the API response
     logger.warn('RESEND_API_KEY not set; skipping invitation email', { to })
     return { skipped: true as const }
   }

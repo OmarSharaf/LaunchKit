@@ -70,6 +70,7 @@ export async function ensureDefaultOrganization(
 
   if (count > 0) return null
 
+  // brand-new user — drop them into a workspace so /dashboard isn't empty
   const name = displayName?.trim()
     ? `${displayName.split(' ')[0]}'s Workspace`
     : 'My Workspace'

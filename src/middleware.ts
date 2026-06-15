@@ -1,10 +1,69 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { rateLimit } from '@/lib/rate-limit'
 
 const PROTECTED_PREFIXES = ['/dashboard', '/org', '/settings', '/billing']
 const AUTH_PREFIXES = ['/auth']
 
+const AUTH_RATE_LIMIT = { limit: 20, windowMs: 60_000 }
+const WEBHOOK_RATE_LIMIT = { limit: 100, windowMs: 60_000 }
+
+function getClientIp(request: NextRequest): string {
+  return (
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown'
+  )
+}
+
+function applyRateLimit(
+  request: NextRequest,
+  prefix: string,
+  config: { limit: number; windowMs: number }
+): NextResponse | null {
+  const ip = getClientIp(request)
+  const key = `${prefix}:${ip}`
+  const result = rateLimit(key, config.limit, config.windowMs)
+
+  if (!result.success) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(result.retryAfter ?? 60),
+        },
+      }
+    )
+  }
+
+  return null
+}
+
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // throttle brute-force on /auth and webhook floods
+  if (pathname.startsWith('/auth')) {
+    const limited = applyRateLimit(request, 'auth', AUTH_RATE_LIMIT)
+    if (limited) return limited
+  }
+
+  if (pathname.startsWith('/api/webhooks/stripe')) {
+    const limited = applyRateLimit(request, 'webhook', WEBHOOK_RATE_LIMIT)
+    if (limited) return limited
+  }
+
+  if (pathname.startsWith('/api/webhooks/whop')) {
+    const limited = applyRateLimit(request, 'webhook', WEBHOOK_RATE_LIMIT)
+    if (limited) return limited
+  }
+
+  if (pathname.startsWith('/api/webhooks/paypal')) {
+    const limited = applyRateLimit(request, 'webhook', WEBHOOK_RATE_LIMIT)
+    if (limited) return limited
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -34,12 +93,10 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session — IMPORTANT: do not remove this.
+  // getUser() hits Supabase to verify the JWT — don't trust getSession() alone
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  const pathname = request.nextUrl.pathname
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix)
@@ -47,11 +104,10 @@ export async function middleware(request: NextRequest) {
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
-    url.searchParams.set('redirectTo', pathname) // send them back after login
+    url.searchParams.set('redirectTo', pathname)
     return NextResponse.redirect(url)
   }
 
-  // already logged in? no point showing login again
   const isAuthRoute = AUTH_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix)
   )
@@ -66,13 +122,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

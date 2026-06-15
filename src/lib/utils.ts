@@ -1,12 +1,11 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-/** shadcn-style className merge — later classes win when Tailwind conflicts */
+// tailwind-merge: later classes win on conflicts (shadcn pattern)
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/** "My Cool Org" → "my-cool-org" for organization URLs */
 export function slugify(str: string): string {
   return str
     .toLowerCase()
@@ -16,9 +15,6 @@ export function slugify(str: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-/**
- * Formats a date relative to now (e.g., "2 hours ago").
- */
 export function formatRelativeDate(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date
   const now = new Date()
@@ -40,9 +36,6 @@ export function formatRelativeDate(date: Date | string): string {
   })
 }
 
-/**
- * Returns initials from a name (e.g., "John Doe" → "JD").
- */
 export function getInitials(name: string): string {
   return name
     .split(' ')
@@ -52,22 +45,17 @@ export function getInitials(name: string): string {
     .slice(0, 2)
 }
 
-/** Stripe statuses that mean the customer still has access */
+// trialing counts as paid access in the billing UI
 export function isSubscriptionActive(status: string): boolean {
   return ['active', 'trialing'].includes(status.toLowerCase())
 }
 
-/**
- * Truncates a string to a given length with ellipsis.
- */
 export function truncate(str: string, length: number): string {
   if (str.length <= length) return str
   return str.slice(0, length - 3) + '...'
 }
 
-/**
- * Returns a consistent color class based on a string (for avatars, badges, etc.).
- */
+// deterministic avatar color from email/name
 export function stringToColor(str: string): string {
   const colors = [
     'bg-red-500',
@@ -95,15 +83,9 @@ export function stringToColor(str: string): string {
   return colors[Math.abs(hash) % colors.length]
 }
 
-/**
- * Delays execution for a given number of milliseconds. Useful in dev/testing.
- */
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms))
 
-/**
- * Generates a random alphanumeric string of a given length.
- */
 export function generateRandomString(length = 16): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   return Array.from({ length }, () =>

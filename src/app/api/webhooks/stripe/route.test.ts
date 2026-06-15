@@ -8,6 +8,9 @@ const mockSubscriptionRetrieve = jest.fn()
 const mockPlanFindFirst = jest.fn()
 const mockSubscriptionUpsert = jest.fn()
 const mockSubscriptionUpdate = jest.fn()
+const mockWebhookEventFindUnique = jest.fn()
+const mockWebhookEventCreate = jest.fn()
+const mockCreateAuditLog = jest.fn()
 
 jest.mock('@/lib/stripe', () => ({
   constructStripeEvent: (...args: unknown[]) =>
@@ -19,12 +22,20 @@ jest.mock('@/lib/stripe', () => ({
   },
 }))
 
+jest.mock('@/lib/audit', () => ({
+  createAuditLog: (...args: unknown[]) => mockCreateAuditLog(...args),
+}))
+
 jest.mock('@/lib/prisma', () => ({
   prisma: {
     plan: { findFirst: (...args: unknown[]) => mockPlanFindFirst(...args) },
     subscription: {
       upsert: (...args: unknown[]) => mockSubscriptionUpsert(...args),
       update: (...args: unknown[]) => mockSubscriptionUpdate(...args),
+    },
+    stripeWebhookEvent: {
+      findUnique: (...args: unknown[]) => mockWebhookEventFindUnique(...args),
+      create: (...args: unknown[]) => mockWebhookEventCreate(...args),
     },
   },
 }))
@@ -46,8 +57,11 @@ describe('POST /api/webhooks/stripe', () => {
     jest.clearAllMocks()
     jest.spyOn(console, 'log').mockImplementation()
     jest.spyOn(console, 'error').mockImplementation()
-    mockSubscriptionUpdate.mockResolvedValue({})
+    mockSubscriptionUpdate.mockResolvedValue({ organizationId: 'org-1' })
     mockSubscriptionUpsert.mockResolvedValue({})
+    mockWebhookEventFindUnique.mockResolvedValue(null)
+    mockWebhookEventCreate.mockResolvedValue({})
+    mockCreateAuditLog.mockResolvedValue({})
   })
 
   afterEach(() => {
@@ -57,6 +71,20 @@ describe('POST /api/webhooks/stripe', () => {
   it('returns 400 when signature is missing', async () => {
     const response = await POST(createWebhookRequest('{}'))
     expect(response.status).toBe(400)
+  })
+
+  it('skips duplicate events', async () => {
+    mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_dup',
+      type: 'unknown.event',
+      data: { object: {} },
+    })
+    mockWebhookEventFindUnique.mockResolvedValue({ id: 'evt_dup' })
+
+    const response = await POST(createWebhookRequest('{}', 'valid-sig'))
+    const data = await response.json()
+    expect(response.status).toBe(200)
+    expect(data.duplicate).toBe(true)
   })
 
   it('returns 400 when signature verification fails', async () => {
@@ -70,6 +98,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles checkout.session.completed', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_checkout',
       type: 'checkout.session.completed',
       data: {
         object: {
@@ -93,10 +122,12 @@ describe('POST /api/webhooks/stripe', () => {
     const response = await POST(createWebhookRequest('{}', 'valid-sig'))
     expect(response.status).toBe(200)
     expect(mockSubscriptionUpsert).toHaveBeenCalled()
+    expect(mockWebhookEventCreate).toHaveBeenCalled()
   })
 
   it('skips checkout when mode is not subscription', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_2',
       type: 'checkout.session.completed',
       data: { object: { mode: 'payment', metadata: {} } },
     })
@@ -107,6 +138,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('skips checkout when organizationId is missing', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_3',
       type: 'checkout.session.completed',
       data: {
         object: { mode: 'subscription', metadata: {}, subscription: 'sub_1' },
@@ -119,6 +151,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles checkout without trial end', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_4',
       type: 'checkout.session.completed',
       data: {
         object: {
@@ -150,6 +183,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('skips upsert when plan is not found', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_5',
       type: 'checkout.session.completed',
       data: {
         object: {
@@ -176,6 +210,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles customer.subscription.updated', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_6',
       type: 'customer.subscription.updated',
       data: {
         object: {
@@ -196,6 +231,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles subscription.updated without trial end', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_7',
       type: 'customer.subscription.updated',
       data: {
         object: {
@@ -216,6 +252,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles customer.subscription.deleted', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_8',
       type: 'customer.subscription.deleted',
       data: { object: { id: 'sub_123' } },
     })
@@ -230,6 +267,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('handles invoice.payment_failed', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_9',
       type: 'invoice.payment_failed',
       data: { object: { subscription: 'sub_123' } },
     })
@@ -242,6 +280,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('skips invoice.payment_failed without subscription', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_10',
       type: 'invoice.payment_failed',
       data: { object: { subscription: null } },
     })
@@ -252,6 +291,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('logs unhandled event types', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_11',
       type: 'unknown.event',
       data: { object: {} },
     })
@@ -262,6 +302,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   it('returns 500 when handler throws', async () => {
     mockConstructStripeEvent.mockReturnValue({
+      id: 'evt_12',
       type: 'customer.subscription.updated',
       data: { object: { id: 'sub_123' } },
     })

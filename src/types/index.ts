@@ -10,9 +10,6 @@ import type {
   SubscriptionStatus,
 } from '@prisma/client'
 
-// ─────────────────────────────────────────────
-// RE-EXPORTS
-// ─────────────────────────────────────────────
 export type {
   User,
   Organization,
@@ -24,10 +21,6 @@ export type {
   UserRole,
   SubscriptionStatus,
 }
-
-// ─────────────────────────────────────────────
-// COMPOSED TYPES
-// ─────────────────────────────────────────────
 
 export type OrganizationWithSubscription = Organization & {
   subscription:
@@ -45,17 +38,9 @@ export type MemberWithUser = OrganizationMember & {
   user: User
 }
 
-// ─────────────────────────────────────────────
-// API RESPONSE TYPES
-// ─────────────────────────────────────────────
-
 export type ApiResponse<T = null> =
   | { success: true; data: T }
   | { success: false; error: string }
-
-// ─────────────────────────────────────────────
-// NAVIGATION
-// ─────────────────────────────────────────────
 
 export interface NavItem {
   title: string
@@ -70,9 +55,5 @@ export interface NavSection {
   title?: string
   items: NavItem[]
 }
-
-// ─────────────────────────────────────────────
-// MISC
-// ─────────────────────────────────────────────
 
 export type ColorScheme = 'light' | 'dark' | 'system'

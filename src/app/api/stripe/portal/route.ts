@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createBillingPortalSession } from '@/lib/stripe'
-import { prisma } from '@/lib/prisma'
-import { requireAuthApi } from '@/lib/auth'
-import { AuthError } from '@/lib/errors'
+import { requireAuthApi, requireOrgRole } from '@/lib/auth'
+import { AuthError, ForbiddenError } from '@/lib/errors'
+import { createAuditLog } from '@/lib/audit'
 import { logger } from '@/lib/logger'
 
 const schema = z.object({
@@ -16,21 +16,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { organizationId } = schema.parse(body)
 
-    const membership = await prisma.organizationMember.findFirst({
-      where: {
-        userId: user.id,
-        organizationId,
-        role: { in: ['ADMIN', 'SUPER_ADMIN'] },
-      },
-      include: { organization: true },
-    })
-
-    if (!membership) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Admin access required' },
-        { status: 403 }
-      )
-    }
+    const membership = await requireOrgRole(organizationId, user.id)
 
     if (!membership.organization.stripeCustomerId) {
       return NextResponse.json(
@@ -45,10 +31,23 @@ export async function POST(request: NextRequest) {
       returnUrl: `${appUrl}/dashboard/billing`,
     })
 
+    await createAuditLog({
+      action: 'billing.portal_opened',
+      entity: 'subscription',
+      userId: user.id,
+      organizationId,
+    })
+
     return NextResponse.json({ url: session.url })
   } catch (err) {
     if (err instanceof AuthError) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (err instanceof ForbiddenError) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Admin access required' },
+        { status: 403 }
+      )
     }
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: err.errors }, { status: 400 })

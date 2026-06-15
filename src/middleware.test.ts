@@ -11,6 +11,7 @@ jest.mock('@supabase/ssr', () => ({
 }))
 
 import { middleware } from './middleware'
+import { resetRateLimits } from '@/lib/rate-limit'
 
 function createRequest(
   pathname: string,
@@ -27,6 +28,7 @@ function createRequest(
 describe('middleware', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    resetRateLimits()
     mockGetUser.mockResolvedValue({ data: { user: null } })
     mockCreateServerClient.mockImplementation((_url, _key, config) => {
       const cookieHandlers = config.cookies
@@ -93,5 +95,13 @@ describe('middleware', () => {
     const { config } = await import('./middleware')
     expect(config.matcher).toBeDefined()
     expect(config.matcher[0]).toContain('_next/static')
+  })
+
+  it('rate limits auth routes', async () => {
+    for (let i = 0; i < 20; i++) {
+      await middleware(createRequest('/auth/login'))
+    }
+    const response = await middleware(createRequest('/auth/login'))
+    expect(response.status).toBe(429)
   })
 })

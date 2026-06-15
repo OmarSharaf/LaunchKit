@@ -1,6 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr'
 
-/** Browser-only Supabase client — use in 'use client' forms and hooks */
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

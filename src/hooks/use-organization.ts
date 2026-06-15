@@ -3,10 +3,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { OrganizationWithSubscription } from '@/types'
 
-/**
- * Fetches the current user's primary organization and subscription.
- * Provides a refetch function for after mutations.
- */
 export function useOrganization(organizationId?: string) {
   const [organization, setOrganization] =
     useState<OrganizationWithSubscription | null>(null)

@@ -4,6 +4,7 @@ import type Stripe from 'stripe'
 import { constructStripeEvent } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 import { WebhookError } from '@/lib/errors'
+import { createAuditLog } from '@/lib/audit'
 import { logger } from '@/lib/logger'
 
 const STRIPE_TO_SUBSCRIPTION_STATUS: Record<
@@ -24,6 +25,20 @@ function mapStripeSubscriptionStatus(
   status: Stripe.Subscription.Status
 ): SubscriptionStatus {
   return STRIPE_TO_SUBSCRIPTION_STATUS[status]
+}
+
+async function isEventProcessed(eventId: string): Promise<boolean> {
+  // Stripe retries — don't double-apply subscription updates
+  const existing = await prisma.stripeWebhookEvent.findUnique({
+    where: { id: eventId },
+  })
+  return Boolean(existing)
+}
+
+async function markEventProcessed(event: Stripe.Event) {
+  await prisma.stripeWebhookEvent.create({
+    data: { id: event.id, type: event.type },
+  })
 }
 
 export async function POST(request: NextRequest) {
@@ -51,6 +66,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  if (await isEventProcessed(event.id)) {
+    logger.info('Stripe webhook duplicate skipped', { id: event.id })
+    return NextResponse.json({ received: true, duplicate: true })
+  }
+
   logger.info('Stripe webhook received', { type: event.type })
 
   try {
@@ -76,6 +96,8 @@ export async function POST(request: NextRequest) {
       default:
         logger.info('Unhandled Stripe event type', { type: event.type })
     }
+
+    await markEventProcessed(event)
   } catch (err) {
     logger.error('Webhook handler failed', {
       type: event.type,
@@ -125,6 +147,7 @@ async function handleCheckoutSessionCompleted(
     create: {
       organizationId,
       planId: plan.id,
+      paymentProvider: 'STRIPE',
       stripeSubscriptionId: subscription.id,
       status: mapStripeSubscriptionStatus(subscription.status),
       currentPeriodStart: new Date(subscription.current_period_start * 1000),
@@ -136,6 +159,7 @@ async function handleCheckoutSessionCompleted(
     },
     update: {
       planId: plan.id,
+      paymentProvider: 'STRIPE',
       stripeSubscriptionId: subscription.id,
       status: mapStripeSubscriptionStatus(subscription.status),
       currentPeriodStart: new Date(subscription.current_period_start * 1000),
@@ -147,11 +171,19 @@ async function handleCheckoutSessionCompleted(
     },
   })
 
+  await createAuditLog({
+    action: 'billing.subscription_created',
+    entity: 'subscription',
+    entityId: subscription.id,
+    organizationId,
+    metadata: { planId: plan.id, status: subscription.status },
+  })
+
   logger.info('Subscription synced from checkout', { organizationId })
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  await prisma.subscription.update({
+  const updated = await prisma.subscription.update({
     where: { stripeSubscriptionId: subscription.id },
     data: {
       status: mapStripeSubscriptionStatus(subscription.status),
@@ -163,27 +195,52 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
         : null,
     },
   })
+
+  await createAuditLog({
+    action: 'billing.subscription_updated',
+    entity: 'subscription',
+    entityId: subscription.id,
+    organizationId: updated.organizationId,
+    metadata: { status: subscription.status },
+  })
+
   logger.info('Subscription updated', { subscriptionId: subscription.id })
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  await prisma.subscription.update({
+  const updated = await prisma.subscription.update({
     where: { stripeSubscriptionId: subscription.id },
     data: {
       status: 'CANCELED',
       cancelAtPeriodEnd: false,
     },
   })
+
+  await createAuditLog({
+    action: 'billing.subscription_canceled',
+    entity: 'subscription',
+    entityId: subscription.id,
+    organizationId: updated.organizationId,
+  })
+
   logger.info('Subscription canceled', { subscriptionId: subscription.id })
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   if (!invoice.subscription) return
 
-  await prisma.subscription.update({
+  const updated = await prisma.subscription.update({
     where: { stripeSubscriptionId: invoice.subscription as string },
     data: { status: 'PAST_DUE' },
   })
+
+  await createAuditLog({
+    action: 'billing.payment_failed',
+    entity: 'subscription',
+    entityId: String(invoice.subscription),
+    organizationId: updated.organizationId,
+  })
+
   logger.warn('Subscription payment failed', {
     subscriptionId: String(invoice.subscription),
   })

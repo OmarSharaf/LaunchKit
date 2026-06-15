@@ -43,24 +43,41 @@ enum InvitationStatus {
   EXPIRED
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum PaymentProvider {
+  STRIPE
+  WHOP
+  PAYPAL
+}
+
 // ─────────────────────────────────────────────
 // USER
 // ─────────────────────────────────────────────
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
+  id            String     @id @default(cuid())
+  email         String     @unique
   name          String?
   avatarUrl     String?
-  emailVerified Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  emailVerified Boolean    @default(false)
+  status        UserStatus @default(ACTIVE)
+  suspendedReason String?
+  isPlatformAdmin Boolean  @default(false)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   // Relations
   memberships  OrganizationMember[]
   invitations  Invitation[]         @relation("InvitedBy")
   auditLogs    AuditLog[]
+  apiKeys      ApiKey[]
 
+  @@index([status, createdAt])
   @@map("users")
 }
 
@@ -79,11 +96,18 @@ model Organization {
   // Stripe
   stripeCustomerId String? @unique
 
+  // Whop
+  whopMemberId String? @unique
+
+  // PayPal
+  paypalPayerId String?
+
   // Relations
   members      OrganizationMember[]
   subscription Subscription?
   invitations  Invitation[]
   auditLogs    AuditLog[]
+  apiKeys      ApiKey[]
 
   @@map("organizations")
 }
@@ -135,6 +159,8 @@ model Plan {
   description       String?
   stripePriceIdMonth String?     @unique
   stripePriceIdYear  String?     @unique
+  whopPlanId         String?     @unique
+  paypalPlanId       String?     @unique
   amount            Int          // in cents
   interval          PlanInterval @default(MONTH)
   features          Json         @default("[]")
@@ -151,7 +177,10 @@ model Plan {
 
 model Subscription {
   id                   String             @id @default(cuid())
-  stripeSubscriptionId String             @unique
+  paymentProvider      PaymentProvider    @default(STRIPE)
+  stripeSubscriptionId String?            @unique
+  whopMembershipId     String?            @unique
+  paypalSubscriptionId String?            @unique
   status               SubscriptionStatus
   currentPeriodStart   DateTime
   currentPeriodEnd     DateTime
@@ -192,4 +221,67 @@ model AuditLog {
   @@index([organizationId, createdAt])
   @@index([userId, createdAt])
   @@map("audit_logs")
+}
+
+// ─────────────────────────────────────────────
+// STRIPE WEBHOOK IDEMPOTENCY
+// ─────────────────────────────────────────────
+
+model StripeWebhookEvent {
+  id          String   @id
+  type        String
+  processedAt DateTime @default(now())
+
+  @@map("stripe_webhook_events")
+}
+
+model WhopWebhookEvent {
+  id          String   @id
+  type        String
+  processedAt DateTime @default(now())
+
+  @@map("whop_webhook_events")
+}
+
+model PaypalWebhookEvent {
+  id          String   @id
+  type        String
+  processedAt DateTime @default(now())
+
+  @@map("paypal_webhook_events")
+}
+
+// ─────────────────────────────────────────────
+// API KEYS
+// ─────────────────────────────────────────────
+
+model ApiKey {
+  id             String    @id @default(cuid())
+  name           String
+  keyHash        String    @unique
+  prefix         String
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+
+  organizationId String
+  createdById    String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy      User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("api_keys")
+}
+
+// ─────────────────────────────────────────────
+// PLATFORM SETTINGS (singleton)
+// ─────────────────────────────────────────────
+
+model PlatformSettings {
+  id             String   @id @default("default")
+  signupsEnabled Boolean  @default(true)
+  updatedAt      DateTime @updatedAt
+
+  @@map("platform_settings")
 }
